@@ -42,13 +42,13 @@ PG.moveGhost = function(ghost) {
     var destLeft;
     var destRight;
     if (pos.left < 0.5 * width) {
-        destLeft = pos.left + Math.random() * width * 0.5;
+        destLeft = pos.left + Math.random() * (width - 100) * 0.5;
     } else {
         destLeft = pos.left - Math.random() * width * 0.5;
     }
 
     if (pos.top < 0.5 * height) {
-        destTop = pos.top + Math.random() * height * 0.5;
+        destTop = pos.top + Math.random() * (height - 100) * 0.5;
     } else {
         destTop = pos.top - Math.random() * height * 0.5;
     }
