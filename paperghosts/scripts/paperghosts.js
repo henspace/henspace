@@ -69,8 +69,8 @@ PG.moveGhost = function(ghost) {
 PG.addGhost = function(name) {
     var index = PG.ghosts.length;
     var id = name + index;
-    var left = Math.random() * $(window).width();
-    var top = Math.random() * $(window).height();
+    var left = Math.random() * ($(window).width() - 100);
+    var top = Math.random() * ($(window).height() - 100);
 
     $("body").append('<div id="' + id + '" class = "ghost" style = "position:absolute;left:' + left + 'px;top:' + top + 'px"><img src="resources/' + name + '.png" /></div>');
     PG.ghosts[index] = $("#" + id);
