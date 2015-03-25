@@ -65,3 +65,16 @@ a:visited {
     position: absolute;
     opacity:0.2;
 }
+
+.columnThin .textBlock {
+    font-size: 14px;
+}
+
+
+.columnThin ul {
+    padding-left: 1em;
+}
+
+li {
+    margin-bottom: 0.5em;
+}
