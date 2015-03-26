@@ -90,3 +90,16 @@ a:visited {
 li {
     margin-bottom: 0.5em;
 }
+a#twitter {
+    margin: 1em;
+    display: block;
+    width: 64px;
+    height: 52px;
+    text-decoration: none;
+    background-image: url('/resources/twitter_logo.png');
+}
+
+a#twitter:hover {
+    background-position: -64px 0;
+}
+
