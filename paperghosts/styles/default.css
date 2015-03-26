@@ -5,6 +5,12 @@ body {
     font-size: 16px;
 }
 
+#mainContainer {
+    max-width:1105px;
+    margin-left: auto;
+    margin-right:auto;
+}
+
 #header img {
     vertical-align: -5px;
 }
@@ -18,12 +24,18 @@ img {  border-style: none;
 }
 
 
-.column {
+.columnLeft {
+    float: left;
+    min-width:200px;
+    max-width:450px;
+}
+
+.columnMiddle {
     float: left;
     width:450px;
 }
 
-.columnThin {
+.columnRight {
     float: left;
     width:200px;
 }
