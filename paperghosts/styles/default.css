@@ -96,7 +96,7 @@ a#twitter {
     width: 64px;
     height: 52px;
     text-decoration: none;
-    background-image: url('/resources/twitter_logo.png');
+    background-image: url('../resources/twitter_logo.png');
 }
 
 a#twitter:hover {
