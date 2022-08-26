@@ -10,7 +10,7 @@
  * passing a number of parameters.
  */
 const VERSION = "1.0.0";
-const ASSETS_LOCATION = './assets';  //'https://henspace.github.io/codingCourse/assets';
+const ASSETS_LOCATION = window.location.hostname == '127.0.0.1' ? './assets' : 'https://henspace.github.io/codingCourse/assets';
 const ATLAS_KEY = 'atlas';
 
 /** The main engine. This also contains some utility methods to get the dimensions of the screen.
