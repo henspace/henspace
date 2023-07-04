@@ -1,0 +1,162 @@
+/**
+ * @file Windows on the houses
+ * @module house-windows
+ * @author Steve Butler
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * @license
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Branch class
+ * @author Steve Butler Steve Butler
+ * @license
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Classes to allow consistent creation of the background
+ * @author Steve Butler Steve Butler
+ * @license
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Final end of game scene.
+ * @author Steve Butler
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * @license
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Global error trap so that issues can be found even on devices where the console might not be accessible.
+ * The functions are self contained to prevent use of modules that might in themselves be the cause of the issue.
+ * @author Steve Butler
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * @license
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Handle narration
+ * @author Steve Butler
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * @license
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Handle screen resolution
+ * @author Steve Butler
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * @license
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Information scene
+ * @author Steve Butler
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * @license
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Load audio.
+ * @author Steve Butler
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * @license
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Main game and introduction scene
+ * @author Steve Butler
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * @license
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Owl class
+ * @author Steve Butler Steve Butler
+ * @license
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Star class
+ * @author Steve Butler Steve Butler
+ * @license
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * The moon which moves in the background.
+ * @author Steve Butler Steve Butler
+ * @license
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Utilities to handle text.
+ * @module textManager
+ * @author Steve Butler
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * @license
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * Version information
+ * @author Steve Butler
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * @license
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
+
+/**
+ * description
+ * @author Steve Butler Steve Butler
+ * @license
+ * @copyright 2022 Steve Butler (henspace@googlemail.com).
+ * All rights reserved.
+ * This file is proprietary and confidential. Unauthorised copying or redistribution of this
+ * file via any medium is strictly prohibited.
+ */
