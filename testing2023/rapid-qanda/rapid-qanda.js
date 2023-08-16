@@ -28,6 +28,7 @@
   */
   const BuildInfo = {
       isBuilt: () => BuildInfo.getMode().indexOf("$") < 0,
+      getBuildDate: () => "2023-08-16 15:12:43Z",
       getMode: () => "development",
       getVersion: () => "1.0.0 ",
       getBundleName: () => "rapid-qanda.js"
@@ -3108,7 +3109,7 @@ Click continue to access the lesson library and see what is available.
     getLineDetails(line) {
       const match = line.match(/^ {0,3}(?:\(+([i?=x+#])\1*\)+)(.*)$/i);
       return match ? {
-        key: match[1],
+        key: match[1].toLowerCase(),
         content: match[2] ?? ""
       } : {
         key: void 0,
@@ -4308,7 +4309,7 @@ Click continue to access the lesson library and see what is available.
       if (footerElement.children?.length > 0) return void console.error("Second attempt made to setup footer ignored.");
       const footerTextContainer = document.createElement("span"),
         devTag = "PRODUCTION" !== BuildInfo.getMode().toUpperCase() ? `[${BuildInfo.getMode()}]` : "";
-      footerTextContainer.innerHTML = `${BuildInfo.getBundleName()} ${BuildInfo.getVersion()}${devTag}`, footerElement.appendChild(footerTextContainer);
+      footerTextContainer.innerHTML = `${BuildInfo.getBundleName()} ${BuildInfo.getVersion()}${devTag} ${BuildInfo.getBuildDate()}`, footerElement.appendChild(footerTextContainer);
     }();
   }
   /**

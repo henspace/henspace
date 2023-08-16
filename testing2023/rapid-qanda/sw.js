@@ -124,7 +124,7 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "f99124c90fc15af754ec5e5cde06dd09"
   }, {
     "url": "rapid-qanda.js",
-    "revision": "6f29619cc8a41a3c1a4b320e0c94c74b"
+    "revision": "6caf3e4628bf380c06483a221326c1bc"
   }], {});
 
 }));
