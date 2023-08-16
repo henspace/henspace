@@ -94,7 +94,7 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "6a9031a09d15e12fbb077e85cc626dca"
   }, {
     "url": "assets/styles/style.css",
-    "revision": "a3dd57f6eb06dffee644ae7e3efc6f2c"
+    "revision": "43405a9b0c889a1aed92d5af344228bd"
   }, {
     "url": "assets/styles/utils-controls.css",
     "revision": "89066e3f2fedf8b08cac8c84d43ff638"
@@ -124,7 +124,7 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "f99124c90fc15af754ec5e5cde06dd09"
   }, {
     "url": "rapid-qanda.js",
-    "revision": "711ee106539fbe6fd2b18b2ac923f1bd"
+    "revision": "6f29619cc8a41a3c1a4b320e0c94c74b"
   }], {});
 
 }));

@@ -1521,9 +1521,10 @@ installed on your device.`;
   */
   const mask = document.getElementById("modal-mask"),
     standardSelectionIds = ["title-bar", "content", "footer"];
-  let itemsToRestore = [];
+  let referenceCount = 0,
+    itemsToRestore = [];
   function deactivateItems() {
-    itemsToRestore.length > 0 && console.warning("Previous mask has not been restored so no more items will be deactivated."), standardSelectionIds.forEach(id => {
+    standardSelectionIds.forEach(id => {
       document.getElementById(id).querySelectorAll("button,.selectable,input,textarea").forEach(element => {
         !function (element) {
           console.debug(`Deactivating ${element.tagName}: ${element.className}`);
@@ -1539,12 +1540,12 @@ installed on your device.`;
     });
   }
   function showMask() {
-    mask.style.visibility = "visible", deactivateItems();
+    mask.style.visibility = "visible", 0 === referenceCount ? deactivateItems() : console.debug(`Reference count ${referenceCount} is > 0 so mask already in place.`), referenceCount++;
   }
   function hideMask() {
-    itemsToRestore.forEach(item => {
+    --referenceCount > 0 ? console.debug(`Reference count ${referenceCount} is > 0 so leave mask in place.`) : (itemsToRestore.forEach(item => {
       item.ariaHidden ? item.element.setAttribute("aria-hidden", item.ariaHidden) : item.element.removeAttribute("aria-hidden"), void 0 !== item.disabled && (item.element.disabled = item.disabled), void 0 !== item.tabIndex && (item.element.tabIndex = item.tabIndex);
-    }), itemsToRestore = [], mask.style.visibility = "hidden";
+    }), itemsToRestore = [], mask.style.visibility = "hidden");
   }
   /**
   * @file Simple popup dialog.
@@ -4311,29 +4312,35 @@ Click continue to access the lesson library and see what is available.
     }();
   }
   /**
-  * @file Main entry point for the application.
+  * @file screensizer
   *
-  * @module main
+  * @module utils/userIo/screenSizer
   *
-  * @license GPL-3.0-or-later
-  * Lesson RunnerCreate quizzes and lessons from plain text files.
+  * @license Apache-2.0
   * Copyright 2023 Steve Butler (henspace.com)
   *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
   *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
+  *    http://www.apache.org/licenses/LICENSE-2.0
   *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
   */
-  BuildInfo.isBuilt() && "production" === BuildInfo.getMode() && "serviceWorker" in navigator && window.addEventListener("load", () => {
+  let throttleTimer = null;
+  function setVhCssVariable() {
+    const vh = .01 * window.innerHeight;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  }
+  window.addEventListener("resize", () => {
+    null === throttleTimer && (throttleTimer = window.setTimeout(() => {
+      throttleTimer = null, setVhCssVariable();
+    }, 1e3));
+  }), setVhCssVariable(), BuildInfo.isBuilt() && "production" === BuildInfo.getMode() && "serviceWorker" in navigator && window.addEventListener("load", () => {
     navigator.serviceWorker.register("./sw.js").then(registration => {
       console.info("SW registered: ", registration);
       let controller = navigator.serviceWorker.controller;
