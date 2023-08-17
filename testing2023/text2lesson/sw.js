@@ -70,7 +70,7 @@ if (!self.define) {
 define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
 
   workbox.setCacheNameDetails({
-    prefix: "rapid_qanda"
+    prefix: "text2lesson"
   });
   self.addEventListener('message', event => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
@@ -121,10 +121,10 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "7c68b1b1aad853b83d0c29a5eefc6eb5"
   }, {
     "url": "index.html",
-    "revision": "f99124c90fc15af754ec5e5cde06dd09"
+    "revision": "dd3ac00f6cd2fb08f71921d042ffc1cd"
   }, {
-    "url": "rapid-qanda.js",
-    "revision": "6caf3e4628bf380c06483a221326c1bc"
+    "url": "text2lesson.js",
+    "revision": "67910dcbb0d2962be89246b440a2e1f3"
   }], {});
 
 }));

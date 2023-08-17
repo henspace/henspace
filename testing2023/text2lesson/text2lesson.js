@@ -28,10 +28,10 @@
   */
   const BuildInfo = {
       isBuilt: () => BuildInfo.getMode().indexOf("$") < 0,
-      getBuildDate: () => "2023-08-16 15:12:43Z",
+      getBuildDate: () => "2023-08-17 07:34:20Z",
       getMode: () => "development",
       getVersion: () => "1.0.0 ",
-      getBundleName: () => "rapid-qanda.js"
+      getBundleName: () => "text2lesson.js"
     },
     blockReps = [{
       re: /(?:(.+)\n=+\n)/g,
@@ -936,7 +936,7 @@
   * You should have received a copy of the GNU General Public License
   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
   */
-  const getPrivacy = () => i18n`# Lesson Runner
+  const getPrivacy = () => i18n`# Text2Lesson
 ## Privacy
 The application does not collect any data at all. No information is stored
 or sent back to the server. No cookies are used.
@@ -1687,24 +1687,27 @@ installed on your device.`;
     }
   }
   /**
-  * @file Singleton that manages a request for a reload.
+  * @file Utility to handle reloading after setting changes.
   *
   * @module utils/userIo/reloader
   *
-  * @license Apache-2.0
+  * @license GPL-3.0-or-later
+  * Create quizzes and lessons from plain text files.
   * Copyright 2023 Steve Butler (henspace.com)
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
   *
-  *    http://www.apache.org/licenses/LICENSE-2.0
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
   *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  *
   */
   const reloader = new class Reloader {
     #reloadRequired = !1;
@@ -1724,24 +1727,27 @@ installed on your device.`;
     }
   }();
   /**
-  * @file Storage for settings values.
+  * @file Cache settings data
   *
   * @module utils/userIo/settingsValueCache
   *
-  * @license Apache-2.0
+  * @license GPL-3.0-or-later
+  * Create quizzes and lessons from plain text files.
   * Copyright 2023 Steve Butler (henspace.com)
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
   *
-  *    http://www.apache.org/licenses/LICENSE-2.0
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
   *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  *
   */
   class SettingsValueCache {
     #storedValues = new Map();
@@ -2341,24 +2347,27 @@ installed on your device.`;
     }
   }
   /**
-  * @file Home screen markdown
+  * @file Home message.
   *
   * @module data/home
   *
-  * @license Apache-2.0
+  * @license GPL-3.0-or-later
+  * Create quizzes and lessons from plain text files.
   * Copyright 2023 Steve Butler (henspace.com)
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
   *
-  *    http://www.apache.org/licenses/LICENSE-2.0
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
   *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  *
   */
   /**
   * @file Simple home page
@@ -2389,7 +2398,7 @@ installed on your device.`;
     }
     #buildContent() {
       this.addPreamble(parseMarkdown(i18n`
-Hi! Welcome to Lesson Runner.
+Hi! Welcome to Text2Lesson.
 This is the fun way to learn coding. This is intend to take you from absolutely
 no knowledge to being able to write code in HTML, CSS and JavaScript. What!
 you don't know what those are! Don't worry, you soon will.
@@ -2586,7 +2595,7 @@ Click continue to access the lesson library and see what is available.
   * @module lessons/textItem
   *
   * @license GPL-3.0-or-later
-  * Rapid Q and ACreate quizzes and lessons from plain text files.
+  * Text2Lesson: create quizzes and lessons from plain text files.
   * Copyright 2023 Steve Butler (henspace.com)
   *
   * This program is free software: you can redistribute it and/or modify
@@ -4313,24 +4322,27 @@ Click continue to access the lesson library and see what is available.
     }();
   }
   /**
-  * @file screensizer
+  * @file Handle screen resizing.
   *
   * @module utils/userIo/screenSizer
   *
-  * @license Apache-2.0
+  * @license GPL-3.0-or-later
+  * Create quizzes and lessons from plain text files.
   * Copyright 2023 Steve Butler (henspace.com)
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
   *
-  *    http://www.apache.org/licenses/LICENSE-2.0
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
   *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  *
   */
   let throttleTimer = null;
   function setVhCssVariable() {
@@ -4450,7 +4462,7 @@ Click continue to access the lesson library and see what is available.
       toast.style.top = "45vh", toast.focus();
     });
   }("Debug message for testing"), ModalDialog.showInfo(i18n`
-Hi! Welcome to Lesson Runner.
+Hi! Welcome to Text2Lesson.
 This is the fun way to learn coding. This is intend to take you from absolutely
 no knowledge to being able to write code in HTML, CSS and JavaScript. What!
 you don't know what those are! Don't worry, you soon will.
