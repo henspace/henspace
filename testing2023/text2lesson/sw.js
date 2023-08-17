@@ -91,7 +91,7 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "202590e432996df541bd306bf3e55f8a"
   }, {
     "url": "assets/styles/lessons.css",
-    "revision": "6a9031a09d15e12fbb077e85cc626dca"
+    "revision": "7b8c7a61c8a33770facfeb63da27767f"
   }, {
     "url": "assets/styles/style.css",
     "revision": "43405a9b0c889a1aed92d5af344228bd"
@@ -103,13 +103,13 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "08902c2e09b226b706b0b514361e0cba"
   }, {
     "url": "assets/styles/utils-icons.css",
-    "revision": "95ec3af092c5e73c78b1fedd613c4f7d"
+    "revision": "c674e76141c146af43ba5b983cd532f0"
   }, {
     "url": "assets/styles/utils-menu.css",
     "revision": "181c587b474ae18a8c3b408efc4a3914"
   }, {
     "url": "assets/styles/utils.css",
-    "revision": "227e04027eb36cecc8ea09c39cb48f0f"
+    "revision": "14bef8eb619405ddcb2eb652d5f0ff1e"
   }, {
     "url": "assets/third-party/font-awesome/css/brands.min.css",
     "revision": "120cd1fc94476fc0d8df485f8f937e20"
@@ -123,8 +123,11 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "url": "index.html",
     "revision": "dd3ac00f6cd2fb08f71921d042ffc1cd"
   }, {
+    "url": "session-data-builder.html",
+    "revision": "186ad465389531bf37538df51a78c6a9"
+  }, {
     "url": "text2lesson.js",
-    "revision": "67910dcbb0d2962be89246b440a2e1f3"
+    "revision": "bd40c0050c6e7a5ffa9f013e19fdca0f"
   }], {});
 
 }));
