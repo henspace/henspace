@@ -28,9 +28,9 @@
   */
   const BuildInfo = {
       isBuilt: () => BuildInfo.getMode().indexOf("$") < 0,
-      getBuildDate: () => "2023-08-18 13:41:38Z",
+      getBuildDate: () => "2023-08-18 21:11:24Z",
       getMode: () => "development",
-      getVersion: () => "1.0.1 ",
+      getVersion: () => "1.0.2 ",
       getBundleName: () => "text2lesson.js"
     },
     blockReps = [{
@@ -556,8 +556,10 @@
         this.#keyPrefix = prefix;
       }
     }(localStorage),
-    Urls_HELP = "https://google.com",
-    Urls_MARKDOWN_HELP = "https://daringfireball.net/projects/markdown/";
+    Urls = {
+      HELP: `${window.location.origin}/assets/documents/help.md`,
+      PRIVACY: `${window.location.origin}/assets/documents/privacy.md`
+    };
   /**
   * @file Collection of urls.
   *
@@ -646,7 +648,7 @@
     #loadLocalLesson(index) {
       const defaultLesson = {
         title: i18n`8be68ffef1e55ad62df2b4a4dd222411::${index}`,
-        content: i18n`0c61e973e1e23347be794197b57f91ab::${`[How to write lessons](${Urls_MARKDOWN_HELP})`}`
+        content: i18n`0c61e973e1e23347be794197b57f91ab::${`[How to write lessons](${Urls.HELP})`}`
       };
       return persistentData.getFromStorage(this.#getStorageKeyForIndex(index), defaultLesson);
     }
@@ -939,39 +941,6 @@
       });
     }(settings));
   }
-  /**
-  * @file Privacy information
-  *
-  * @module data/privacy
-  *
-  * @license GPL-3.0-or-later
-  * Create quizzes and lessons from plain text files.
-  * Copyright 2023 Steve Butler (henspace.com)
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-  */
-  const getPrivacy = () => i18n`# Text2Lesson
-## Privacy
-The application does not collect any data at all. No information is stored
-or sent back to the server. No cookies are used.
-### Local storage
-Your results are stored locally on your device. This is the only place they
-are stored.
-### Sharing
-If your device supports it, your progress can be shared with others using the 
-Web Share api. Where you can share information depends upon the other apps
-installed on your device.`;
   /**
   * @file Base 64 functions
   *
@@ -1477,7 +1446,7 @@ installed on your device.`;
       const label = options.overrideText ?? icon.accessibleName,
         element = ManagedElement.getElement(item),
         role = options.role?.toLowerCase();
-      element.innerHTML = icon.content, icon.accessibleName && !options.hideText && (element.innerHTML += ` ${label}`), this.semanticsAddressRole(element, role) ? options.hideText && element.setAttribute("aria-label", label) : (element.setAttribute("role", role), element.setAttribute("aria-label", label));
+      element.innerHTML = icon.content, icon.accessibleName && !options.hideText && (element.innerHTML += `&nbsp;${label}`), this.semanticsAddressRole(element, role) ? options.hideText && element.setAttribute("aria-label", label) : (element.setAttribute("role", role), element.setAttribute("aria-label", label));
     }
   }();
   /**
@@ -2106,7 +2075,7 @@ installed on your device.`;
     }, {
       iconDetails: icons.privacy,
       command: {
-        execute: () => Promise.resolve(parseMarkdown(getPrivacy())).then(statement => ModalDialog.showInfo(statement))
+        execute: () => window.open(Urls.PRIVACY, "_blank")
       }
     }];
   }
@@ -3238,7 +3207,7 @@ installed on your device.`;
     exportAutoRunLesson() {
       const html = function (b64Title, b64LessonData) {
         const rootUrl = window.location.href.replace(/index\.html(\?.*)?$/, "");
-        return `<!DOCTYPE html>\n\x3c!-- \nThis file embeds the session-data-builder in an iframe and then \nbuilds up the lesson in session storage as base64 encoded data.\nOnce fully loaded, the iframe src is replaced by the full text2lesson application.\n--\x3e\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <title>Text2Lesson: Embedded lesson runner</title>\n    <style>\n      * {\n        margin: 0;\n        padding: 0;\n      }\n      html {\n        height: -webkit-fill-available; \n      }\n      body {\n        overflow: hidden;\n      }\n      #progress {\n        padding: 1em;\n        position: absolute;\n        width: 60vw;\n        margin-top: 50vh;\n        left: 0;\n        top: 0;\n        z-index: 10;\n      }\n      iframe {\n        border: 0;\n        width: 100vw;\n        height: 100vh;\n      }\n    </style>\n  </head>\n  <body>\n    <iframe id="data-loader"></iframe>\n    <div id="progress">Loading Text2Lesson:</div>\n  </body>\n  <script>\n    const LESSON_TITLE_B64 = "${b64Title}";\n    const LESSON_SOURCE_B64 = "${b64LessonData}";\n\n    const LOADER_URL = '${rootUrl}session-data-builder.html';\n    const APPLICATION_URL = '${rootUrl}index.html';\n    const loader = document.getElementById('data-loader');\n    const progress = document.getElementById('progress');\n    const dataChunks = LESSON_SOURCE_B64.match(/.{1,1800}/g);\n    let index = -1;\n    loaded = false;\n    const eventListener = loader.addEventListener('load', () => {\n      if (loaded) {\n        return;\n      }\n      progress.innerHTML += ' .';\n      if (index < dataChunks.length) {\n        if (index < 0) {\n          loader.src = \`\${LOADER_URL}?title=\${encodeURI(LESSON_TITLE_B64)}\`;\n          index++;\n        } else {\n          loader.src = \`\${LOADER_URL}?data=\${encodeURI(dataChunks[index++])}\`;\n        }\n      } else {\n        loader.src = APPLICATION_URL;\n        loaded = true;\n        progress.style.display = 'none';\n      }\n    });\n    loader.src = \`\${LOADER_URL}\`;\n  <\/script>\n</html>\n`;
+        return `<!DOCTYPE html>\n\x3c!-- \nThis file embeds the session-data-builder in an iframe and then \nbuilds up the lesson in session storage as base64 encoded data.\nOnce fully loaded, the iframe src is replaced by the full text2lesson application.\n--\x3e\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <title>Text2Lesson: Embedded lesson runner</title>\n    <style>\n      * {\n        margin: 0;\n        padding: 0;\n      }\n      html {\n        height: -webkit-fill-available; \n      }\n      body {\n        overflow: hidden;\n      }\n      noscript {\n        left: 0;\n        position: absolute;\n        top: 0;\n      }\n      #progress {\n        padding: 1em;\n        position: absolute;\n        width: 60vw;\n        margin-top: 50vh;\n        left: 0;\n        top: 0;\n        z-index: 10;\n      }\n      iframe {\n        border: 0;\n        width: 100vw;\n        height: 100vh;\n      }\n    </style>\n  </head>\n  <body>\n    <iframe id="data-loader"></iframe>\n    <div id="progress"></div>\n    <noscript class="always-on-top">\n      <p>\n        Your browser does not support scripts and so this application cannot\n        run. If you've disabled scripts, you will need to enable them to\n        proceed. Sorry.\n      </p>\n    </noscript>\n  </body>\n  <script>\n    const LESSON_TITLE_B64 = "${b64Title}";\n    const LESSON_SOURCE_B64 = "${b64LessonData}";\n\n    const LOADER_URL = '${rootUrl}session-data-builder.html';\n    const APPLICATION_URL = '${rootUrl}index.html';\n    const loader = document.getElementById('data-loader');\n    const progress = document.getElementById('progress');\n    const dataChunks = LESSON_SOURCE_B64.match(/.{1,1800}/g);\n    progress.innerHTML = 'Loading: ';\n    let index = -1;\n    loaded = false;\n    const eventListener = loader.addEventListener('load', () => {\n      if (loaded) {\n        return;\n      }\n      progress.innerHTML += ' .';\n      if (index < dataChunks.length) {\n        if (index < 0) {\n          loader.src = \`\${LOADER_URL}?title=\${encodeURI(LESSON_TITLE_B64)}\`;\n          index++;\n        } else {\n          loader.src = \`\${LOADER_URL}?data=\${encodeURI(dataChunks[index++])}\`;\n        }\n      } else {\n        loader.src = APPLICATION_URL;\n        loaded = true;\n        progress.style.display = 'none';\n      }\n    });\n    loader.src = \`\${LOADER_URL}\`;\n  <\/script>\n</html>\n`;
       }(stringToBase64(this.#title), stringToBase64(this.#content));
       this.saveDataToFile(html, "html");
     }
@@ -4107,10 +4076,16 @@ Click continue to access the lesson library and see what is available.
   *
   */
   class ReadSpeedCalculator {
+    static MIN_WPM = 80;
+    static MAX_WPM = 1e3;
     #secondsPerWord;
     constructor() {
       let wordsPerMinute = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 130;
-      this.#secondsPerWord = 60 / wordsPerMinute;
+      this.setWordsPerMinute(wordsPerMinute);
+    }
+    setWordsPerMinute(wordsPerMinute) {
+      let wpm = parseInt(wordsPerMinute);
+      isNaN(wpm) ? console.error(`Attempt made to set words per minute to non-numeric value of ${wordsPerMinute}`) : (wpm = Math.max(wordsPerMinute, ReadSpeedCalculator.MIN_WPM), wpm = Math.min(wpm, ReadSpeedCalculator.MAX_WPM), this.#secondsPerWord = 60 / wpm);
     }
     getSecondsToRead(data) {
       return getPlainTextFromHtml(data).trim().split(/\s+/).length * this.#secondsPerWord;
@@ -4171,6 +4146,9 @@ Click continue to access the lesson library and see what is available.
     }
     reset() {
       this.#index = 0;
+    }
+    setWordsPerMinute(wpm) {
+      this.#readSpeedCalculator.setWordsPerMinute(wpm);
     }
   }
   /**
@@ -4243,7 +4221,8 @@ Click continue to access the lesson library and see what is available.
     }
     #showNextCard() {
       if (console.log("Show the next card"), this.#endShowIfLastCard()) return;
-      this.#currentCardDetail = this.#cards.getNext(), this.#visualCard.innerHTML = this.#currentCardDetail.html;
+      const readingSpeed = persistentData.getFromStorage("readingSpeed", 130);
+      this.#cards.setWordsPerMinute(readingSpeed), this.#currentCardDetail = this.#cards.getNext(), this.#visualCard.innerHTML = this.#currentCardDetail.html;
       const cardRect = this.#visualCard.getBoundingClientRect(),
         verticalSpace = this.presentation.getBoundingClientRect().height - cardRect.height;
       this.#visualCard.style.marginTop = verticalSpace > 0 ? `${Math.floor(verticalSpace / 2)}px` : "0px", this.#setCardState(CardState_ARRIVING), this.#endShowIfLastCard();
@@ -4571,7 +4550,7 @@ Click continue to access the lesson library and see what is available.
     }
     handleClickEvent(eventIgnored, eventIdIgnored) {
       const presenter = document.querySelector(".Presenter");
-      console.debug(`Help triggered from ${presenter?.className}`), window.open(Urls_HELP, "_blank");
+      console.debug(`Help triggered from ${presenter?.className}`), window.open(Urls.HELP, "_blank");
     }
     static createInside(container) {
       const button = new HelpButton(container);
@@ -4819,6 +4798,13 @@ Click continue to access the lesson library and see what is available.
         setProperty("--font-base-size", `${value}px`);
       }
     },
+    readingSpeed: {
+      type: "range",
+      label: i18n`23944ac1bff1399fe70064067e3e4804::`,
+      defaultValue: "180",
+      min: 80,
+      max: 1e3
+    },
     lessonInfo: {
       type: "separator",
       label: i18n`16c6a433b76133c6204c165f24374006::`
@@ -4830,19 +4816,8 @@ Click continue to access the lesson library and see what is available.
       onupdate: value => {
         lessonManager.remoteLibraryKey = value;
       },
-      dependents: ["book"],
       options: () => lessonManager.remoteLibraryTitles,
       reloadIfChanged: !0
-    },
-    test: {
-      type: "checkbox",
-      label: "test item",
-      defaultValue: !0,
-      onupdate: value => console.debug(`Updating test item with value ${value}`),
-      validate: value => (console.debug(`Validating test with value ${value}.`), {
-        pass: value,
-        errorMessage: value ? "" : "Testing validation failure."
-      })
     }
   })).then(() => {
     const language = i18n`language::`;

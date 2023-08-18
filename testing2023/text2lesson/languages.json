@@ -4,7 +4,6 @@
   },
   "location": "assets/i18n/",
   "files": [
-    "en.json",
-    "fr.json"
+    "en.json"
   ]
 }

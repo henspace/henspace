@@ -94,7 +94,7 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "1607216cd55ccaa264f4b312b4c2d4bd"
   }, {
     "url": "assets/styles/style.css",
-    "revision": "a99e66bab5c16f9ba851942ed8918d02"
+    "revision": "ee4e21beb035fb6cb24dd01d8a6a16c4"
   }, {
     "url": "assets/styles/utils-controls.css",
     "revision": "89066e3f2fedf8b08cac8c84d43ff638"
@@ -109,7 +109,7 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "181c587b474ae18a8c3b408efc4a3914"
   }, {
     "url": "assets/styles/utils.css",
-    "revision": "a1af6e125f1866c41c5ba7362adfb908"
+    "revision": "6abe6fabbb095d9ab60852ee2c25d779"
   }, {
     "url": "assets/third-party/font-awesome/css/brands.min.css",
     "revision": "120cd1fc94476fc0d8df485f8f937e20"
@@ -121,13 +121,13 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "7c68b1b1aad853b83d0c29a5eefc6eb5"
   }, {
     "url": "index.html",
-    "revision": "dd3ac00f6cd2fb08f71921d042ffc1cd"
+    "revision": "2fd495604f3f2ff5f4442fecaf533a29"
   }, {
     "url": "session-data-builder.html",
     "revision": "186ad465389531bf37538df51a78c6a9"
   }, {
     "url": "text2lesson.js",
-    "revision": "6e4c1d7e296f10357a8d45226cbe4af8"
+    "revision": "c8c4fb7b159e79f0a29aa1196b83336a"
   }], {});
 
 }));

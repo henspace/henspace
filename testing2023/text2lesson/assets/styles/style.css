@@ -24,6 +24,19 @@
   box-sizing: border-box;
 }
 
+#browser-not-supported {
+  display: none;
+}
+
+@supports not ((display: flex) and (transform: translate(50%, 50%))) {
+  #content {
+    display: none !important;
+  }
+  #browser-not-supported {
+    display: block !important;
+  }
+}
+
 
 :root {
   --primary-base: hsl(120, 50, 50);
@@ -57,6 +70,12 @@
   --panel-border: solid var(--line-thickness);
   --margin: calc(var(--outline-offset) + var(--line-thickness));
   --vh: 1vh;
+}
+
+noscript {
+  left: 0;
+  position: absolute;
+  top: 0;
 }
 
 
@@ -177,7 +196,7 @@ h3 {
   visibility: hidden;
   height: 100%;
   left: 0px;
-  opacity: 0;
+  opacity: 80%;
   padding: 0px;
   position: absolute;
   width: 100%;
