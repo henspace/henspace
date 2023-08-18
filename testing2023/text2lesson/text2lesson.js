@@ -28,9 +28,9 @@
   */
   const BuildInfo = {
       isBuilt: () => BuildInfo.getMode().indexOf("$") < 0,
-      getBuildDate: () => "2023-08-17 16:22:55Z",
+      getBuildDate: () => "2023-08-18 13:41:38Z",
       getMode: () => "development",
-      getVersion: () => "1.0.0 ",
+      getVersion: () => "1.0.1 ",
       getBundleName: () => "text2lesson.js"
     },
     blockReps = [{
@@ -691,6 +691,10 @@
   * You should have received a copy of the GNU General Public License
   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
   */
+  const LessonOrigin_REMOTE = "remote",
+    LessonOrigin_LOCAL = "local",
+    LessonOrigin_SESSION = "session",
+    LessonOrigin_FILE_SYSTEM = "file_system";
   const lessonManager = new class LessonManager {
       #usingLocalLibrary = !1;
       #libraries = new Map();
@@ -769,9 +773,9 @@
       get currentLessonInfo() {
         return this.#buildCurrentLessonInfo();
       }
-      getUnmanagedLessonInfo(lessonTitle) {
+      getUnmanagedLessonInfo(lessonTitle, origin) {
         return {
-          managed: !1,
+          origin: origin,
           usingLocalLibrary: !1,
           libraryKey: void 0,
           file: void 0,
@@ -793,7 +797,7 @@
         this.#ensureIndexesValid();
         const book = this.#getCurrentBook();
         return {
-          managed: !0,
+          origin: this.#usingLocalLibrary ? LessonOrigin_LOCAL : LessonOrigin_REMOTE,
           usingLocalLibrary: this.#usingLocalLibrary,
           libraryKey: this.#currentLibraryKey,
           file: book?.chapters[this.#currentChapterIndex]?.lessons[this.#currentLessonIndex]?.file,
@@ -1308,6 +1312,12 @@ installed on your device.`;
         accessibleName: i18n`c5836008c1649301e29351a55db8f65c::`
       };
     }
+    get openFolder() {
+      return {
+        content: this.#getIconHtml("--icon-open-folder-html"),
+        accessibleName: i18n`a6e75eb31dc77e8d077fb6f92909e191::`
+      };
+    }
     get forward() {
       return {
         content: this.#getIconHtml("--icon-forward-nav-html"),
@@ -1326,10 +1336,28 @@ installed on your device.`;
         accessibleName: i18n`8cf04a9734132302f96da8e113e80ce5::`
       };
     }
+    get import() {
+      return {
+        content: this.#getIconHtml("--icon-import-html"),
+        accessibleName: i18n`28dd16bcceda4431550c96dfc257dd22::`
+      };
+    }
     get info() {
       return {
         content: this.#getIconHtml("--icon-info-html"),
         accessibleName: i18n`c5836008c1649301e29351a55db8f65c::`
+      };
+    }
+    get selectLesson() {
+      return {
+        content: this.#getIconHtml("--icon-lesson-html"),
+        accessibleName: i18n`666258634f2ea689eac1e01b184a3cea::`
+      };
+    }
+    get library() {
+      return {
+        content: this.#getIconHtml("--icon-library-html"),
+        accessibleName: i18n`d6e5c296474cad126efdfa515a47f1f8::`
       };
     }
     get load() {
@@ -1446,9 +1474,10 @@ installed on your device.`;
     }
     applyIconToElement(icon, item) {
       let options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-      const element = ManagedElement.getElement(item),
+      const label = options.overrideText ?? icon.accessibleName,
+        element = ManagedElement.getElement(item),
         role = options.role?.toLowerCase();
-      element.innerHTML = icon.content, icon.accessibleName && !options.hideText && (element.innerHTML += ` ${icon.accessibleName}`), this.semanticsAddressRole(element, role) ? options.hideText && element.setAttribute("aria-label", icon.accessibleName) : (element.setAttribute("role", role), element.setAttribute("aria-label", icon.accessibleName));
+      element.innerHTML = icon.content, icon.accessibleName && !options.hideText && (element.innerHTML += ` ${label}`), this.semanticsAddressRole(element, role) ? options.hideText && element.setAttribute("aria-label", label) : (element.setAttribute("role", role), element.setAttribute("aria-label", label));
     }
   }();
   /**
@@ -2819,6 +2848,52 @@ installed on your device.`;
     }
   }
   /**
+  * @file Class to handle unmanaged lessons
+  *
+  * @module lessons/unmanagedLesson
+  *
+  * @license GPL-3.0-or-later
+  * Create quizzes and lessons from plain text files.
+  * Copyright 2023 Steve Butler (henspace.com)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  *
+  */
+  class UnmanagedLesson {
+    static DATA_KEY = "data";
+    static TITLE_KEY = "title";
+    #data;
+    #title;
+    #lesson;
+    #origin;
+    constructor(title, data, origin) {
+      this.#title = title, data && (this.#lesson = this.#convertDataToLesson(data)), this.#origin = origin;
+    }
+    #convertDataToLesson(data) {
+      return LessonSource.createFromSource(data).convertToLesson();
+    }
+    get hasLesson() {
+      return !!this.#lesson;
+    }
+    get lesson() {
+      return this.#lesson;
+    }
+    get lessonInfo() {
+      return lessonManager.getUnmanagedLessonInfo(escapeHtml(this.#title), this.#origin);
+    }
+  }
+  /**
   * @file Handle lesson provided via session data.
   *
   * @module lessons/sessionDataLesson
@@ -2841,30 +2916,13 @@ installed on your device.`;
   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
   *
   */
-  class SessionLesson {
+  class SessionLesson extends UnmanagedLesson {
     static DATA_KEY = "data";
     static TITLE_KEY = "title";
-    #data;
-    #title;
-    #lesson;
     constructor() {
-      this.#title = this.#getSessionItem(SessionLesson.TITLE_KEY);
-      const data = this.#getSessionItem(SessionLesson.DATA_KEY);
-      data && (this.#lesson = this.#convertDataToLesson(data));
+      super(SessionLesson.#getSessionItem(SessionLesson.TITLE_KEY), SessionLesson.#getSessionItem(SessionLesson.DATA_KEY), LessonOrigin_SESSION);
     }
-    #convertDataToLesson(data) {
-      return LessonSource.createFromSource(data).convertToLesson();
-    }
-    get hasLesson() {
-      return !!this.#lesson;
-    }
-    get lesson() {
-      return this.#lesson;
-    }
-    get lessonInfo() {
-      return lessonManager.getUnmanagedLessonInfo(escapeHtml(this.#title));
-    }
-    #getSessionItem(key) {
+    static #getSessionItem(key) {
       const storedValue = sessionStorage.getItem(key);
       return storedValue ? base64ToString(storedValue) : storedValue;
     }
@@ -2990,11 +3048,13 @@ installed on your device.`;
     showNextButton(focus) {
       this.#forwardsButton.show(), focus && this.#forwardsButton.focus();
     }
-    applyIconToNextButton(iconDetails) {
-      icons.applyIconToElement(iconDetails, this.#forwardsButton);
+    applyIconToNextButton(iconDetails, overrideText) {
+      icons.applyIconToElement(iconDetails, this.#forwardsButton, {
+        overrideText: overrideText
+      });
     }
-    setupKeyboardNavigation(managedElements) {
-      if (this.#navigator) return void console.error("setUpKeyboardNavigation can only be called once.");
+    autoAddKeydownEvents(managedElements) {
+      if (this.#navigator) return void console.error("autoAddKeydownEvents can only be called once.");
       const items = managedElements ?? this.#presentation.managedChildren;
       this.#navigator = new ArrayIndexer(items, !0), items.forEach((item, index) => {
         this.listenToEventOn("keydown", item, index);
@@ -3034,40 +3094,6 @@ installed on your device.`;
     }
   }
   /**
-  * @file list presenter
-  *
-  * @module lessons/presenters/listPresenter
-  *
-  * @license GPL-3.0-or-later
-  * Create quizzes and lessons from plain text files.
-  * Copyright 2023 Steve Butler (henspace.com)
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-  *
-  */
-  class ListPresenter extends Presenter {
-    constructor(config) {
-      super(config, "ul"), this.#buildContent();
-    }
-    #buildContent() {
-      this.config?.titles?.forEach((title, index) => {
-        const itemElement = new ManagedElement("li", this.config.itemClassName);
-        itemElement.setAttribute("tabindex", "0"), itemElement.classList.add("selectable"), this.presentation.appendChild(itemElement), itemElement.innerHTML = title, this.listenToEventOn("click", itemElement, index);
-      }), this.config?.factory?.hasPrevious(this) && this.showBackButton();
-    }
-  }
-  /**
   * @file Home message.
   *
   * @module data/home
@@ -3091,52 +3117,9 @@ installed on your device.`;
   *
   */
   /**
-  * @file Simple home page
+  * @file File input control
   *
-  * @module lessons/presenters/homePresenter
-  *
-  * @license GPL-3.0-or-later
-  * Create quizzes and lessons from plain text files.
-  * Copyright 2023 Steve Butler (henspace.com)
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-  *
-  */
-  class HomePresenter extends ListPresenter {
-    constructor(config) {
-      config.titles = [i18n`d6e5c296474cad126efdfa515a47f1f8::`, i18n`d63e17b8da99189aff04b37070c61c8e::`], config.itemClassName = "library", super(config), this.#buildContent(), this.setupKeyboardNavigation();
-    }
-    #buildContent() {
-      this.addPreamble(parseMarkdown(i18n`
-Hi! Welcome to Text2Lesson.
-This is the fun way to learn coding. This is intend to take you from absolutely
-no knowledge to being able to write code in HTML, CSS and JavaScript. What!
-you don't know what those are! Don't worry, you soon will.
-Let's get started.
-
-Click continue to access the lesson library and see what is available.
-
-`));
-    }
-    next(index) {
-      return lessonManager.usingLocalLibrary = 1 === index, super.next(index);
-    }
-  }
-  /**
-  * @file Present a library on the stage.
-  *
-  * @module lessons/presenters/libraryPresenter
+  * @module utils/userIo/fileInput
   *
   * @license GPL-3.0-or-later
   * Create quizzes and lessons from plain text files.
@@ -3156,132 +3139,27 @@ Click continue to access the lesson library and see what is available.
   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
   *
   */
-  class LibraryPresenter extends ListPresenter {
-    constructor(config) {
-      config.titles = lessonManager.bookTitles, config.itemClassName = "book", super(config), this.#buildPreamble(), this.setupKeyboardNavigation();
+  class FileInputButton extends ManagedElement {
+    static DATA_AVAILABLE_EVENT_NAME = "dataAvailable";
+    #input;
+    constructor(overrideText) {
+      super("label", "file-input-button"), this.classList.add("selectable"), this.#input = new ManagedElement("input"), this.#input.setAttribute("type", "file"), icons.applyIconToElement(icons.import, this, {
+        overrideText: overrideText
+      }), this.#input.style.visibility = "hidden", this.#input.style.height = "1em", this.appendChild(this.#input), this.listenToEventOn("change", this.#input);
     }
-    #buildPreamble() {
-      this.addPreamble(`<span class='library-title'>${lessonManager.libraryTitle}</span>`);
-    }
-    next(index) {
-      return lessonManager.bookIndex = index, super.next(index);
-    }
-  }
-  /**
-  * @file Presenter for books
-  *
-  * @module lessons/presenters/bookPresenter
-  *
-  * @license GPL-3.0-or-later
-  * Create quizzes and lessons from plain text files.
-  * Copyright 2023 Steve Butler (henspace.com)
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-  *
-  */
-  class BookPresenter extends ListPresenter {
-    constructor(config) {
-      config.titles = lessonManager.chapterTitles, config.itemClassName = "chapter", super(config), this.setupKeyboardNavigation(), this.#buildPreamble();
-    }
-    #buildPreamble() {
-      this.addPreamble(`<span class='library-title'>${lessonManager.libraryTitle}</span>\n    <span class='book-title'>${lessonManager.bookTitle}</span>\n    `);
-    }
-    next(index) {
-      return lessonManager.chapterIndex = index, super.next(index);
-    }
-  }
-  /**
-  * @file Chapter presenter
-  *
-  * @module lessons/presenters/chapterPresenter
-  *
-  * @license GPL-3.0-or-later
-  * Create quizzes and lessons from plain text files.
-  * Copyright 2023 Steve Butler (henspace.com)
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-  *
-  */
-  class ChapterPresenter extends ListPresenter {
-    constructor(config) {
-      config.titles = lessonManager.lessonTitles, config.itemClassName = "lesson", super(config), this.#buildPreamble(), this.setupKeyboardNavigation();
-    }
-    #buildPreamble() {
-      lessonManager.usingLocalLibrary ? this.addPreamble(`<span class='library-title'>${lessonManager.libraryTitle}</span>`) : this.addPreamble(`<span class='library-title'>${lessonManager.libraryTitle}</span>\n        <span class='book-title'>${lessonManager.bookTitle}</span>\n        <span class='chapter-title'>${lessonManager.chapterTitle}</span>\n        `);
-    }
-    next(index) {
-      return lessonManager.lessonIndex = index, super.next(index);
-    }
-  }
-  /**
-  * @file Lesson Presenter
-  *
-  * @module lessons/presenters/lessonPresenter
-  *
-  * @license GPL-3.0-or-later
-  * Create quizzes and lessons from plain text files.
-  * Copyright 2023 Steve Butler (henspace.com)
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-  *
-  */
-  class LessonPresenter extends Presenter {
-    static EDIT_EVENT_ID = "EDIT_LESSON";
-    constructor(config) {
-      config.titles = ["placeholder"], config.itemClassName = "lesson-summary", super(config), this.config.lessonInfo = lessonManager.currentLessonInfo, this.#buildCustomContent(), this.setupKeyboardNavigation(), this.config?.factory?.hasPrevious(this) && this.showBackButton();
-    }
-    #buildCustomContent() {
-      this.presentation.createAndAppendChild("h2", null, i18n`8f8bfb5f6d96fb3113a39f781f6fffe4::`);
-      const summaryBlock = this.presentation.createAndAppendChild("div", "lesson-summary");
-      summaryBlock.createAndAppendChild("span", "lesson-title", this.config.lessonInfo.titles.lesson), summaryBlock.createAndAppendChild("p", null, i18n`d6cd575eb2dab528448d6c6810598452::`), summaryBlock.createAndAppendChild("span", "library-title", this.config.lessonInfo.titles.library), lessonManager.usingLocalLibrary || (summaryBlock.createAndAppendChild("span", "book-title", this.config.lessonInfo.titles.book), summaryBlock.createAndAppendChild("span", "chapter-title", this.config.lessonInfo.titles.chapter)), this.presentation.appendChild(summaryBlock), this.applyIconToNextButton(icons.playLesson), this.showNextButton(), this.#addEditButtonIfLocal();
-    }
-    #addEditButtonIfLocal() {
-      if (this.config.lessonInfo.usingLocalLibrary) {
-        const editButton = new ManagedElement("button");
-        icons.applyIconToElement(icons.edit, editButton), this.addButtonToBar(editButton), this.listenToEventOn("click", editButton, LessonPresenter.EDIT_EVENT_ID);
-      }
-    }
-    next(eventId) {
-      return eventId === LessonPresenter.EDIT_EVENT_ID ? this.config.factory.getEditor(this, this.config) : lessonManager.loadCurrentLesson().then(cachedLesson => {
-        const lessonSource = LessonSource.createFromSource(cachedLesson.content);
-        return this.config.lesson = lessonSource.convertToLesson(), this.config.factory.getNext(this, this.config);
-      });
-    }
-    previous() {
-      return this.config.factory.getPrevious(this, this.config);
+    handleChangeEvent(eventIgnored, eventIdIgnored) {
+      const file = this.#input.element.files[0];
+      if (!file) return;
+      const reader = new FileReader(),
+        control = this;
+      reader.addEventListener("load", () => {
+        reader.result, control.dispatchEvent(new CustomEvent(FileInputButton.DATA_AVAILABLE_EVENT_NAME, {
+          detail: {
+            file: file,
+            content: reader.result
+          }
+        }));
+      }), reader.readAsText(file);
     }
   }
   /**
@@ -3349,12 +3227,18 @@ Click continue to access the lesson library and see what is available.
       return `${this.#title.replace(/[^A-Za-z0-9_-]/g, "_").substring(0, 32)}.${extension}`;
     }
     exportLesson() {
+      return ModalDialog.showDialog(i18n`b68686a697ec08b09db6d729aed81c71::`, i18n`5ae903bf09202faef9d5fcedbf21cf14::`, {
+        dialogType: ModalDialog.DialogType.QUESTION,
+        buttons: [icons.export, icons.exportAutoRun]
+      }).then(index => 0 === index ? this.exportPlainLesson() : this.exportAutoRunLesson());
+    }
+    exportPlainLesson() {
       this.saveDataToFile(stringToBase64(this.lessonAsString), "txt");
     }
     exportAutoRunLesson() {
       const html = function (b64Title, b64LessonData) {
         const rootUrl = window.location.href.replace(/index\.html(\?.*)?$/, "");
-        return `<!DOCTYPE html>\n\x3c!-- \nThis file embeds the session-data-builder in an iframe and then \nbuilds up the lesson in session storage as base64 encoded data.\nOnce fully loaded, the iframe src is replaced by the full text2lesson application.\n--\x3e\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <title>Text2Lesson: Embedded lesson runner</title>\n    <style>\n      * {\n        margin: 0;\n        padding: 0;\n      }\n      body {\n        overflow: hidden;\n      }\n      #progress {\n        padding: 1em;\n        position: absolute;\n        width: 60vw;\n        margin-top: 50vh;\n        left: 0;\n        top: 0;\n        z-index: 10;\n      }\n      iframe {\n        border: 0;\n        width: 100vw;\n        height: 100vh;\n      }\n    </style>\n  </head>\n  <body>\n    <iframe id="data-loader"></iframe>\n    <div id="progress">Loading Text2Lesson:</div>\n  </body>\n  <script>\n    const LESSON_TITLE_B64 = "${b64Title}";\n    const LESSON_SOURCE_B64 = "${b64LessonData}";\n\n    const LOADER_URL = '${rootUrl}session-data-builder.html';\n    const APPLICATION_URL = '${rootUrl}index.html';\n    const loader = document.getElementById('data-loader');\n    const progress = document.getElementById('progress');\n    const chunkSize = 50;\n    const dataChunks = LESSON_SOURCE_B64.match(/.{1,50}/g);\n    let index = -1;\n    loaded = false;\n    const eventListener = loader.addEventListener('load', () => {\n      if (loaded) {\n        return;\n      }\n      progress.innerHTML += ' .';\n      if (index < dataChunks.length) {\n        if (index < 0) {\n          loader.src = \`\${LOADER_URL}?title=\${encodeURI(LESSON_TITLE_B64)}\`;\n          index++;\n        } else {\n          loader.src = \`\${LOADER_URL}?data=\${encodeURI(dataChunks[index++])}\`;\n        }\n      } else {\n        loader.src = APPLICATION_URL;\n        loaded = true;\n        progress.style.display = 'none';\n      }\n    });\n    loader.src = \`\${LOADER_URL}\`;\n  <\/script>\n</html>\n`;
+        return `<!DOCTYPE html>\n\x3c!-- \nThis file embeds the session-data-builder in an iframe and then \nbuilds up the lesson in session storage as base64 encoded data.\nOnce fully loaded, the iframe src is replaced by the full text2lesson application.\n--\x3e\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <title>Text2Lesson: Embedded lesson runner</title>\n    <style>\n      * {\n        margin: 0;\n        padding: 0;\n      }\n      html {\n        height: -webkit-fill-available; \n      }\n      body {\n        overflow: hidden;\n      }\n      #progress {\n        padding: 1em;\n        position: absolute;\n        width: 60vw;\n        margin-top: 50vh;\n        left: 0;\n        top: 0;\n        z-index: 10;\n      }\n      iframe {\n        border: 0;\n        width: 100vw;\n        height: 100vh;\n      }\n    </style>\n  </head>\n  <body>\n    <iframe id="data-loader"></iframe>\n    <div id="progress">Loading Text2Lesson:</div>\n  </body>\n  <script>\n    const LESSON_TITLE_B64 = "${b64Title}";\n    const LESSON_SOURCE_B64 = "${b64LessonData}";\n\n    const LOADER_URL = '${rootUrl}session-data-builder.html';\n    const APPLICATION_URL = '${rootUrl}index.html';\n    const loader = document.getElementById('data-loader');\n    const progress = document.getElementById('progress');\n    const dataChunks = LESSON_SOURCE_B64.match(/.{1,1800}/g);\n    let index = -1;\n    loaded = false;\n    const eventListener = loader.addEventListener('load', () => {\n      if (loaded) {\n        return;\n      }\n      progress.innerHTML += ' .';\n      if (index < dataChunks.length) {\n        if (index < 0) {\n          loader.src = \`\${LOADER_URL}?title=\${encodeURI(LESSON_TITLE_B64)}\`;\n          index++;\n        } else {\n          loader.src = \`\${LOADER_URL}?data=\${encodeURI(dataChunks[index++])}\`;\n        }\n      } else {\n        loader.src = APPLICATION_URL;\n        loaded = true;\n        progress.style.display = 'none';\n      }\n    });\n    loader.src = \`\${LOADER_URL}\`;\n  <\/script>\n</html>\n`;
       }(stringToBase64(this.#title), stringToBase64(this.#content));
       this.saveDataToFile(html, "html");
     }
@@ -3363,6 +3247,311 @@ Click continue to access the lesson library and see what is available.
       tempA.setAttribute("href", this.getDataUri(data)), tempA.setAttribute("download", this.getFilename(extension)), tempA.addEventListener("click", () => {
         document.body.removeChild(tempA);
       }), document.body.appendChild(tempA), tempA.click();
+    }
+  }
+  class LessonImporter {
+    constructor() {}
+    convert(exportedData) {
+      try {
+        return JSON.parse(base64ToString(exportedData));
+      } catch (error) {
+        return console.error(error), null;
+      }
+    }
+  }
+  /**
+  * @file Popup message.
+  *
+  * @module utils/dialog/toast
+  *
+  * @license GPL-3.0-or-later
+  * Create quizzes and lessons from plain text files.
+  * Copyright 2023 Steve Butler (henspace.com)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  */
+  class Toast extends ManagedElement {
+    constructor(message, rawHtml) {
+      super("div", "utils-toast"), this.classList.add("selectable", "always-on-top"), this.setAttributes({
+        "aria-role": "alert",
+        tabindex: "0"
+      });
+      const content = new ManagedElement("div", "container"),
+        icon = new ManagedElement("div");
+      icons.applyIconToElement(icons.closeMenu, icon.element, {
+        hideText: !0
+      }), this.appendChild(content), this.appendChild(icon), rawHtml ? content.innerHTML = message : content.textContent = message, this.listenToOwnEvent("click", ""), this.listenToOwnEvent("keydown", "");
+    }
+    #dismiss() {
+      this.style.opacity = 0, this.remove(), focusManager.findBestFocus();
+    }
+    handleClickEvent(eventIgnored) {
+      this.#dismiss();
+    }
+    handleKeydownEvent(event) {
+      console.debug(`Key ${event.key}`), "Escape" !== event.key && " " !== event.key && "Enter" !== event.key || this.#dismiss();
+    }
+  }
+  function toast(message) {
+    const toast = new Toast(message);
+    document.body.appendChild(toast.element), setTimeout(() => {
+      toast.style.top = "45vh", toast.focus();
+    });
+  }
+  /**
+  * @file Simple home page
+  *
+  * @module lessons/presenters/homePresenter
+  *
+  * @license GPL-3.0-or-later
+  * Create quizzes and lessons from plain text files.
+  * Copyright 2023 Steve Butler (henspace.com)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  *
+  */
+  class HomePresenter extends Presenter {
+    static REMOTE_LIBRARY_ID = "REMOTE";
+    static LOCAL_LIBRARY_ID = "LOCAL";
+    static FILE_LIBRARY_ID = "FILE_SYSTEM";
+    #importSummary;
+    constructor(config) {
+      config.titles = [i18n`d6e5c296474cad126efdfa515a47f1f8::`, i18n`d63e17b8da99189aff04b37070c61c8e::`], config.itemClassName = "library", super(config), this.#buildContent(), this.hideHomeButton();
+    }
+    #buildContent() {
+      let button = new ManagedElement("button");
+      icons.applyIconToElement(icons.library, button, {
+        overrideText: i18n`adc4c5f402b068fae17cc33ecf648d5d::`
+      }), this.presentation.appendChild(button), this.listenToEventOn("click", button, HomePresenter.REMOTE_LIBRARY_ID), button = new ManagedElement("button"), icons.applyIconToElement(icons.library, button, {
+        overrideText: i18n`38e69d0f533dbbdcb17089ef96094b43::`
+      }), this.presentation.appendChild(button), this.listenToEventOn("click", button, HomePresenter.LOCAL_LIBRARY_ID), button = new FileInputButton(i18n`9148a8aa9f535484f03b98ae018a76b6::`), this.presentation.appendChild(button), this.listenToEventOn(FileInputButton.DATA_AVAILABLE_EVENT_NAME, button, HomePresenter.FILE_LIBRARY_ID), this.addPreamble(parseMarkdown(i18n`
+Hi! Welcome to Text2Lesson.
+This is the fun way to learn coding. This is intend to take you from absolutely
+no knowledge to being able to write code in HTML, CSS and JavaScript. What!
+you don't know what those are! Don't worry, you soon will.
+Let's get started.
+
+Click continue to access the lesson library and see what is available.
+
+`));
+    }
+    handleDataAvailableEvent(event, eventIdIgnored) {
+      const importer = new LessonImporter();
+      this.#importSummary = importer.convert(event.detail.content), this.#importSummary ? this.handleClickEvent(event, HomePresenter.FILE_LIBRARY_ID) : toast(`Unable to import the file ${event.detail?.file?.name}. The file may be corrupt or the wrong type of file.`);
+    }
+    next(index) {
+      if (index === HomePresenter.FILE_LIBRARY_ID) {
+        const unmanagedLesson = new UnmanagedLesson(this.#importSummary.title, this.#importSummary.content, LessonOrigin_FILE_SYSTEM);
+        return this.config.lesson = unmanagedLesson.lesson, this.config.lessonInfo = unmanagedLesson.lessonInfo, this.config.factory.getSuitableProblemPresenter(this.config);
+      }
+      return lessonManager.usingLocalLibrary = index === HomePresenter.LOCAL_LIBRARY_ID, super.next(index);
+    }
+  }
+  /**
+  * @file list presenter
+  *
+  * @module lessons/presenters/listPresenter
+  *
+  * @license GPL-3.0-or-later
+  * Create quizzes and lessons from plain text files.
+  * Copyright 2023 Steve Butler (henspace.com)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  *
+  */
+  class ListPresenter extends Presenter {
+    constructor(config) {
+      super(config, "ul"), this.#buildContent();
+    }
+    #buildContent() {
+      this.config?.titles?.forEach((title, index) => {
+        const itemElement = new ManagedElement("li", this.config.itemClassName);
+        itemElement.setAttribute("tabindex", "0"), itemElement.classList.add("selectable"), this.presentation.appendChild(itemElement), itemElement.innerHTML = title, this.listenToEventOn("click", itemElement, index);
+      }), this.config?.factory?.hasPrevious(this) && this.showBackButton();
+    }
+  }
+  /**
+  * @file Present a library on the stage.
+  *
+  * @module lessons/presenters/libraryPresenter
+  *
+  * @license GPL-3.0-or-later
+  * Create quizzes and lessons from plain text files.
+  * Copyright 2023 Steve Butler (henspace.com)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  *
+  */
+  class LibraryPresenter extends ListPresenter {
+    constructor(config) {
+      config.titles = lessonManager.bookTitles, config.itemClassName = "book", super(config), this.#buildPreamble(), this.autoAddKeydownEvents();
+    }
+    #buildPreamble() {
+      this.addPreamble(`<span class='library-title'>${lessonManager.libraryTitle}</span>`);
+    }
+    next(index) {
+      return lessonManager.bookIndex = index, super.next(index);
+    }
+  }
+  /**
+  * @file Presenter for books
+  *
+  * @module lessons/presenters/bookPresenter
+  *
+  * @license GPL-3.0-or-later
+  * Create quizzes and lessons from plain text files.
+  * Copyright 2023 Steve Butler (henspace.com)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  *
+  */
+  class BookPresenter extends ListPresenter {
+    constructor(config) {
+      config.titles = lessonManager.chapterTitles, config.itemClassName = "chapter", super(config), this.autoAddKeydownEvents(), this.#buildPreamble();
+    }
+    #buildPreamble() {
+      this.addPreamble(`<span class='library-title'>${lessonManager.libraryTitle}</span>\n    <span class='book-title'>${lessonManager.bookTitle}</span>\n    `);
+    }
+    next(index) {
+      return lessonManager.chapterIndex = index, super.next(index);
+    }
+  }
+  /**
+  * @file Chapter presenter
+  *
+  * @module lessons/presenters/chapterPresenter
+  *
+  * @license GPL-3.0-or-later
+  * Create quizzes and lessons from plain text files.
+  * Copyright 2023 Steve Butler (henspace.com)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  *
+  */
+  class ChapterPresenter extends ListPresenter {
+    constructor(config) {
+      config.titles = lessonManager.lessonTitles, config.itemClassName = "lesson", super(config), this.#buildPreamble(), this.autoAddKeydownEvents();
+    }
+    #buildPreamble() {
+      lessonManager.usingLocalLibrary ? this.addPreamble(`<span class='library-title'>${lessonManager.libraryTitle}</span>`) : this.addPreamble(`<span class='library-title'>${lessonManager.libraryTitle}</span>\n        <span class='book-title'>${lessonManager.bookTitle}</span>\n        <span class='chapter-title'>${lessonManager.chapterTitle}</span>\n        `);
+    }
+    next(index) {
+      return lessonManager.lessonIndex = index, super.next(index);
+    }
+  }
+  /**
+  * @file Lesson Presenter
+  *
+  * @module lessons/presenters/lessonPresenter
+  *
+  * @license GPL-3.0-or-later
+  * Create quizzes and lessons from plain text files.
+  * Copyright 2023 Steve Butler (henspace.com)
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  *
+  */
+  class LessonPresenter extends Presenter {
+    static EDIT_EVENT_ID = "EDIT_LESSON";
+    constructor(config) {
+      config.titles = ["placeholder"], config.itemClassName = "lesson-summary", super(config), this.config.lessonInfo = lessonManager.currentLessonInfo, this.#buildCustomContent(), this.autoAddKeydownEvents(), this.config?.factory?.hasPrevious(this) && this.showBackButton();
+    }
+    #buildCustomContent() {
+      this.presentation.createAndAppendChild("h2", null, i18n`8f8bfb5f6d96fb3113a39f781f6fffe4::`);
+      const summaryBlock = this.presentation.createAndAppendChild("div", "lesson-summary");
+      summaryBlock.createAndAppendChild("span", "lesson-title", this.config.lessonInfo.titles.lesson), summaryBlock.createAndAppendChild("p", null, i18n`d6cd575eb2dab528448d6c6810598452::`), summaryBlock.createAndAppendChild("span", "library-title", this.config.lessonInfo.titles.library), lessonManager.usingLocalLibrary || (summaryBlock.createAndAppendChild("span", "book-title", this.config.lessonInfo.titles.book), summaryBlock.createAndAppendChild("span", "chapter-title", this.config.lessonInfo.titles.chapter)), this.presentation.appendChild(summaryBlock), this.applyIconToNextButton(icons.playLesson), this.showNextButton(), this.#addEditButtonIfLocal();
+    }
+    #addEditButtonIfLocal() {
+      if (this.config.lessonInfo.usingLocalLibrary) {
+        const editButton = new ManagedElement("button");
+        icons.applyIconToElement(icons.edit, editButton), this.addButtonToBar(editButton), this.listenToEventOn("click", editButton, LessonPresenter.EDIT_EVENT_ID);
+      }
+    }
+    next(eventId) {
+      return eventId === LessonPresenter.EDIT_EVENT_ID ? this.config.factory.getEditor(this, this.config) : lessonManager.loadCurrentLesson().then(cachedLesson => {
+        const lessonSource = LessonSource.createFromSource(cachedLesson.content);
+        return this.config.lesson = lessonSource.convertToLesson(), this.config.factory.getNext(this, this.config);
+      });
+    }
+    previous() {
+      return this.config.factory.getPrevious(this, this.config);
     }
   }
   /**
@@ -3391,16 +3580,17 @@ Click continue to access the lesson library and see what is available.
   class LessonEditorPresenter extends Presenter {
     static SAVE_EVENT_ID = "SAVE";
     static EXPORT_EVENT_ID = "EXPORT";
-    static EXPORT_AUTORUN_EVENT_ID = "EXPORT_RUNNER";
+    static IMPORT_EVENT_ID = "IMPORT";
     #lessonTitleElement;
     #lessonTitleValue;
     #mainEditorElement;
     #saveButton;
+    #importForm;
+    #importButton;
     #exportButton;
-    #exportAutoRunButton;
     #dirty;
     constructor(config) {
-      config.titles = ["placeholder"], config.itemClassName = "lesson-editor", super(config), this.#buildCustomContent(), this.#addSaveButton(), this.#addExportButton(), this.#addExportAutoRunButton(), this.expandPresentation(), this.#setEditorAsClean(), this.applyIconToNextButton(icons.closeEditor), this.showNextButton(), this.#dirty = !1;
+      config.titles = ["placeholder"], config.itemClassName = "lesson-editor", super(config), this.#buildCustomContent(), this.#addSaveButton(), this.#addImportButton(), this.#addExportButton(), this.expandPresentation(), this.#setEditorAsClean(), this.applyIconToNextButton(icons.closeEditor), this.showNextButton(), this.#dirty = !1;
     }
     async #buildCustomContent() {
       const cachedLesson = await lessonManager.loadCurrentLesson();
@@ -3424,11 +3614,19 @@ Click continue to access the lesson library and see what is available.
     #addSaveButton() {
       this.#saveButton = new ManagedElement("button"), icons.applyIconToElement(icons.save, this.#saveButton), this.listenToEventOn("click", this.#saveButton, LessonEditorPresenter.SAVE_EVENT_ID), this.addButtonToBar(this.#saveButton);
     }
+    #addImportButton() {
+      this.#importForm = new ManagedElement("form", "button-wrapper"), this.#importButton = new FileInputButton(), this.#importForm.appendChild(this.#importButton), this.listenToEventOn(FileInputButton.DATA_AVAILABLE_EVENT_NAME, this.#importButton, LessonEditorPresenter.IMPORT_EVENT_ID), this.addButtonToBar(this.#importForm);
+    }
     #addExportButton() {
       this.#exportButton = new ManagedElement("button"), icons.applyIconToElement(icons.export, this.#exportButton), this.listenToEventOn("click", this.#exportButton, LessonEditorPresenter.EXPORT_EVENT_ID), this.addButtonToBar(this.#exportButton);
     }
-    #addExportAutoRunButton() {
-      this.#exportAutoRunButton = new ManagedElement("button"), icons.applyIconToElement(icons.exportAutoRun, this.#exportAutoRunButton), this.listenToEventOn("click", this.#exportAutoRunButton, LessonEditorPresenter.EXPORT_AUTORUN_EVENT_ID), this.addButtonToBar(this.#exportAutoRunButton);
+    handleDataAvailableEvent(event, eventIdIgnored) {
+      this.#importForm.element.reset();
+      const importSummary = new LessonImporter().convert(event.detail.content);
+      if (importSummary) return ModalDialog.showConfirm(i18n`b087a0f6368816df1cbbf2700e7de192::`).then(answer => {
+        answer === ModalDialog.DialogIndex.CONFIRM_YES && (this.#lessonTitleElement.setValue(importSummary.title), this.#lessonTitleValue = importSummary.title, this.#mainEditorElement.value = importSummary.content, this.#setEditorAsDirty());
+      });
+      toast(`Unable to import the file ${event.detail?.file?.name}. The file may be corrupt or the wrong type of file.`);
     }
     handleInputEvent(eventIgnored, eventIdIgnored) {
       this.#setEditorAsDirty();
@@ -3442,8 +3640,6 @@ Click continue to access the lesson library and see what is available.
           return this.#saveLessonLocally();
         case LessonEditorPresenter.EXPORT_EVENT_ID:
           return this.#exportLesson();
-        case LessonEditorPresenter.EXPORT_AUTORUN_EVENT_ID:
-          return this.#exportAutoRunLesson();
         default:
           return super.handleClickEvent(event, eventId);
       }
@@ -3453,9 +3649,6 @@ Click continue to access the lesson library and see what is available.
     }
     #exportLesson() {
       new LessonExporter(this.#lessonTitleValue, this.#mainEditorElement.value).exportLesson();
-    }
-    #exportAutoRunLesson() {
-      new LessonExporter(this.#lessonTitleValue, this.#mainEditorElement.value).exportAutoRunLesson();
     }
   }
   /**
@@ -3650,7 +3843,7 @@ Click continue to access the lesson library and see what is available.
       super(config), this.#buildSimpleOrMultiple();
     }
     #buildSimpleOrMultiple() {
-      this.#buildAnswers(), this.setupKeyboardNavigation(this.answerElement.managedChildren);
+      this.#buildAnswers(), this.autoAddKeydownEvents(this.answerElement.managedChildren);
     }
     #buildAnswers() {
       this.#answerListElement = new ManagedElement("ul"), this.answerElement.appendChild(this.#answerListElement), this.#answerListElement.setAttributes({
@@ -3789,7 +3982,7 @@ Click continue to access the lesson library and see what is available.
       this.#missingWordSelectors = [], questionWordElements.forEach((element, index) => {
         const selector = new SelectControl(index, settingDefinition);
         element.appendChild(selector.element), this.#missingWordSelectors.push(selector);
-      }), this.setupKeyboardNavigation(this.#missingWordSelectors);
+      }), this.autoAddKeydownEvents(this.#missingWordSelectors);
     }
     areAnswersCorrect() {
       let correct = !0;
@@ -3862,7 +4055,7 @@ Click continue to access the lesson library and see what is available.
           selectControl = new SelectControl(index, settingDefinition);
         this.#missingWordSelectors.push(selectControl), span.appendChild(selectControl), orderedAnswers.appendChild(span);
       }
-      this.answerElement.appendChild(orderedAnswers), this.setupKeyboardNavigation(this.#missingWordSelectors);
+      this.answerElement.appendChild(orderedAnswers), this.autoAddKeydownEvents(this.#missingWordSelectors);
     }
     areAnswersCorrect() {
       let correct = !0;
@@ -4141,7 +4334,16 @@ Click continue to access the lesson library and see what is available.
       super(config), this.#buildContent();
     }
     #buildContent() {
-      this.#addHeadings(), this.#addAnswers(), this.#addResult(), this.#addRetryButton(), this.config.lessonInfo.managed || (this.hideHomeButton(), this.applyIconToNextButton(icons.exit)), this.showNextButton();
+      this.#addHeadings(), this.#addAnswers(), this.#addResult(), this.#addRetryButton(), this.#adjustButtonsForOrigin();
+    }
+    #adjustButtonsForOrigin() {
+      switch (this.config.lessonInfo.origin) {
+        case LessonOrigin_SESSION:
+          this.hideHomeButton(), this.applyIconToNextButton(icons.exit), this.showNextButton();
+          break;
+        case LessonOrigin_REMOTE:
+          this.applyIconToNextButton(icons.selectLesson), this.showNextButton();
+      }
     }
     #addHeadings() {
       this.presentation.createAndAppendChild("h1", null, i18n`8a7b5ed72835af8c2804d8f5047da3d3::`), this.presentation.createAndAppendChild("h2", null, this.config.lessonInfo.titles.lesson), this.#addBookDetailsIfManaged();
@@ -4193,11 +4395,9 @@ Click continue to access the lesson library and see what is available.
         case MarksPresenter.RETRY_LESSON_ID:
           return this.config.factory.getProblemAgain(this, this.config);
         case Presenter.NEXT_ID:
-          sessionStorage.clear(), window.top.location.replace(window.location.href);
-          break;
-        default:
-          return super.next(eventId);
+          if (this.config.lessonInfo.origin === LessonOrigin_SESSION) return sessionStorage.clear(), void window.top.location.replace(window.location.href);
       }
+      return super.next(eventId);
     }
   }
   /**
@@ -4273,20 +4473,20 @@ Click continue to access the lesson library and see what is available.
       next: ChapterPresenter
     }
   };
-  function getSuitableProblemPresenter(config) {
-    switch (config.lesson.peekAtNextProblem().questionType) {
-      case QuestionType_ORDER:
-        return new OrderProblemPresenter(config);
-      case QuestionType_FILL:
-        return new FillProblemPresenter(config);
-      case QuestionType_MULTI:
-      case QuestionType_SIMPLE:
-        return new ChoiceProblemPresenter(config);
-      default:
-        return new SlideProblemPresenter(config);
-    }
-  }
   class PresenterFactory {
+    getSuitableProblemPresenter(config) {
+      switch (config.lesson.peekAtNextProblem().questionType) {
+        case QuestionType_ORDER:
+          return new OrderProblemPresenter(config);
+        case QuestionType_FILL:
+          return new FillProblemPresenter(config);
+        case QuestionType_MULTI:
+        case QuestionType_SIMPLE:
+          return new ChoiceProblemPresenter(config);
+        default:
+          return new SlideProblemPresenter(config);
+      }
+    }
     hasNext(caller) {
       return !!NAVIGATION[caller.constructor.name].next;
     }
@@ -4300,7 +4500,7 @@ Click continue to access the lesson library and see what is available.
       return caller instanceof LessonPresenter ? new LessonEditorPresenter(config) : (console.error("Attempt to edit a presenter for which there is no editor. Going home."), new HomePresenter(config));
     }
     getNext(caller, config) {
-      if (caller instanceof ProblemPresenter || caller instanceof LessonPresenter) return config.lesson.hasMoreProblems ? getSuitableProblemPresenter(config) : new MarksPresenter(config);
+      if (caller instanceof ProblemPresenter || caller instanceof LessonPresenter) return config.lesson.hasMoreProblems ? this.getSuitableProblemPresenter(config) : new MarksPresenter(config);
       {
         const klass = this.#skipUnnecessaryListPresenters(NAVIGATION[caller.constructor.name].next);
         return klass ? new klass(config) : null;
@@ -4311,7 +4511,7 @@ Click continue to access the lesson library and see what is available.
       return klass ? new klass(config) : null;
     }
     getProblemAgain(caller, config) {
-      return caller instanceof MarksPresenter ? (config.lesson.restart(), config.lesson.hasMoreProblems ? getSuitableProblemPresenter(config) : new MarksPresenter(config)) : (console.error("Attempt to retry problem from other than a MarksPresenter."), this.getHome(config));
+      return caller instanceof MarksPresenter ? (config.lesson.restart(), config.lesson.hasMoreProblems ? this.getSuitableProblemPresenter(config) : new MarksPresenter(config)) : (console.error("Attempt to retry problem from other than a MarksPresenter."), this.getHome(config));
     }
     #skipUnnecessaryListPresenters(presenterClass) {
       for (;;) {
@@ -4337,7 +4537,7 @@ Click continue to access the lesson library and see what is available.
       const config = {
         factory: new PresenterFactory()
       };
-      return sessionLesson.hasLesson ? (config.lesson = sessionLesson.lesson, config.lessonInfo = sessionLesson.lessonInfo, config.lesson.hasMoreProblems ? getSuitableProblemPresenter(config) : new MarksPresenter(config)) : new HomePresenter(config);
+      return sessionLesson.hasLesson ? (config.lesson = sessionLesson.lesson, config.lessonInfo = sessionLesson.lessonInfo, config.lesson.hasMoreProblems ? config.factory.getSuitableProblemPresenter(config) : new MarksPresenter(config)) : new HomePresenter(config);
     }
   }
   /**

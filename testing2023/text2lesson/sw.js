@@ -85,31 +85,31 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
    */
   workbox.precacheAndRoute([{
     "url": "assets/styles/candy.css",
-    "revision": "4c045d66476e490bfea8d61f801b5e33"
+    "revision": "2d244de6baef43cfb6cdb6b631441494"
   }, {
     "url": "assets/styles/cards.css",
     "revision": "202590e432996df541bd306bf3e55f8a"
   }, {
     "url": "assets/styles/lessons.css",
-    "revision": "7b8c7a61c8a33770facfeb63da27767f"
+    "revision": "1607216cd55ccaa264f4b312b4c2d4bd"
   }, {
     "url": "assets/styles/style.css",
-    "revision": "43405a9b0c889a1aed92d5af344228bd"
+    "revision": "a99e66bab5c16f9ba851942ed8918d02"
   }, {
     "url": "assets/styles/utils-controls.css",
     "revision": "89066e3f2fedf8b08cac8c84d43ff638"
   }, {
     "url": "assets/styles/utils-dialogs.css",
-    "revision": "08902c2e09b226b706b0b514361e0cba"
+    "revision": "51bef65b8e202c67a9949ffca37ee591"
   }, {
     "url": "assets/styles/utils-icons.css",
-    "revision": "c674e76141c146af43ba5b983cd532f0"
+    "revision": "c0acd919e9534e0c0d1d0f655faae9f0"
   }, {
     "url": "assets/styles/utils-menu.css",
     "revision": "181c587b474ae18a8c3b408efc4a3914"
   }, {
     "url": "assets/styles/utils.css",
-    "revision": "14bef8eb619405ddcb2eb652d5f0ff1e"
+    "revision": "a1af6e125f1866c41c5ba7362adfb908"
   }, {
     "url": "assets/third-party/font-awesome/css/brands.min.css",
     "revision": "120cd1fc94476fc0d8df485f8f937e20"
@@ -127,7 +127,7 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "186ad465389531bf37538df51a78c6a9"
   }, {
     "url": "text2lesson.js",
-    "revision": "bd40c0050c6e7a5ffa9f013e19fdca0f"
+    "revision": "6e4c1d7e296f10357a8d45226cbe4af8"
   }], {});
 
 }));
