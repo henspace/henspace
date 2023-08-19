@@ -109,7 +109,7 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "181c587b474ae18a8c3b408efc4a3914"
   }, {
     "url": "assets/styles/utils.css",
-    "revision": "6abe6fabbb095d9ab60852ee2c25d779"
+    "revision": "46015e5cf30037fefe6c8bca5642f3f3"
   }, {
     "url": "assets/third-party/font-awesome/css/brands.min.css",
     "revision": "120cd1fc94476fc0d8df485f8f937e20"
@@ -127,7 +127,7 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "186ad465389531bf37538df51a78c6a9"
   }, {
     "url": "text2lesson.js",
-    "revision": "659cd34655b658efea5fd8e77f6f6b72"
+    "revision": "ce089ac77c608871cfdd89f79c7a0ac8"
   }], {});
 
 }));

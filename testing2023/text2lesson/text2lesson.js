@@ -28,9 +28,9 @@
   */
   const BuildInfo = {
       isBuilt: () => BuildInfo.getMode().indexOf("$") < 0,
-      getBuildDate: () => "2023-08-18 21:39:43Z",
+      getBuildDate: () => "2023-08-19 07:41:59Z",
       getMode: () => "development",
-      getVersion: () => "1.0.3 ",
+      getVersion: () => "1.0.4 ",
       getBundleName: () => "text2lesson.js"
     },
     blockReps = [{
@@ -3208,7 +3208,7 @@
     exportAutoRunLesson() {
       const html = function (b64Title, b64LessonData) {
         const rootUrl = window.location.href.replace(/index\.html(\?.*)?$/, "");
-        return `<!DOCTYPE html>\n\x3c!-- \nThis file embeds the session-data-builder in an iframe and then \nbuilds up the lesson in session storage as base64 encoded data.\nOnce fully loaded, the iframe src is replaced by the full text2lesson application.\n--\x3e\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <title>Text2Lesson: Embedded lesson runner</title>\n    <style>\n      * {\n        margin: 0;\n        padding: 0;\n      }\n      html {\n        height: -webkit-fill-available; \n      }\n      body {\n        overflow: hidden;\n      }\n      noscript {\n        left: 0;\n        position: absolute;\n        top: 0;\n      }\n      #progress {\n        padding: 1em;\n        position: absolute;\n        width: 60vw;\n        margin-top: 50vh;\n        left: 0;\n        top: 0;\n        z-index: 10;\n      }\n      iframe {\n        border: 0;\n        width: 100vw;\n        height: 100vh;\n      }\n    </style>\n  </head>\n  <body>\n    <iframe id="data-loader"></iframe>\n    <div id="progress"></div>\n    <noscript class="always-on-top">\n      <p>\n        Your browser does not support scripts and so this application cannot\n        run. If you've disabled scripts, you will need to enable them to\n        proceed. Sorry.\n      </p>\n    </noscript>\n  </body>\n  <script>\n    const LESSON_TITLE_B64 = "${b64Title}";\n    const LESSON_SOURCE_B64 = "${b64LessonData}";\n\n    const LOADER_URL = '${rootUrl}session-data-builder.html';\n    const APPLICATION_URL = '${rootUrl}index.html';\n    const loader = document.getElementById('data-loader');\n    const progress = document.getElementById('progress');\n    const dataChunks = LESSON_SOURCE_B64.match(/.{1,1800}/g);\n    progress.innerHTML = 'Loading: ';\n    let index = -1;\n    loaded = false;\n    const eventListener = loader.addEventListener('load', () => {\n      if (loaded) {\n        return;\n      }\n      progress.innerHTML += ' .';\n      if (index < dataChunks.length) {\n        if (index < 0) {\n          loader.src = \`\${LOADER_URL}?title=\${encodeURI(LESSON_TITLE_B64)}\`;\n          index++;\n        } else {\n          loader.src = \`\${LOADER_URL}?data=\${encodeURI(dataChunks[index++])}\`;\n        }\n      } else {\n        loader.src = APPLICATION_URL;\n        loaded = true;\n        progress.style.display = 'none';\n      }\n    });\n    loader.src = \`\${LOADER_URL}\`;\n  <\/script>\n</html>\n`;
+        return `<!DOCTYPE html>\n\x3c!-- \nText2Lesson loader.\n--\x3e\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <title>Text2Lesson: Embedded lesson runner</title>\n    <style>\n      * {\n        margin: 0;\n        padding: 0;\n      }\n      html {\n        height: -webkit-fill-available; \n      }\n      body {\n        overflow: hidden;\n      }\n      noscript {\n        left: 0;\n        position: absolute;\n        top: 0;\n      }\n      #progress {\n        padding: 1em;\n        position: absolute;\n        width: 60vw;\n        margin-top: 50vh;\n        left: 0;\n        top: 0;\n        z-index: 10;\n      }\n      iframe {\n        border: 0;\n        width: 100vw;\n        height: 100vh;\n      }\n    </style>\n  </head>\n  <body>\n    <iframe id="data-loader"></iframe>\n    <div id="progress"></div>\n    <noscript class="always-on-top">\n      <p>\n        Your browser does not support scripts and so this application cannot\n        run. If you've disabled scripts, you will need to enable them to\n        proceed. Sorry.\n      </p>\n    </noscript>\n  </body>\n  <script>\n    const LESSON_TITLE_B64 = "${b64Title}";\n    const LESSON_SOURCE_B64 = "${b64LessonData}";\n\n    const LOADER_URL = '${rootUrl}session-data-builder.html';\n    const APPLICATION_URL = '${rootUrl}index.html';\n    const loader = document.getElementById('data-loader');\n    const progress = document.getElementById('progress');\n    const dataChunks = LESSON_SOURCE_B64.match(/.{1,1800}/g);\n    progress.innerHTML = 'Loading: ';\n    let index = -1;\n    loaded = false;\n    const eventListener = loader.addEventListener('load', () => {\n      if (loaded) {\n        return;\n      }\n      progress.innerHTML += ' .';\n      if (index < dataChunks.length) {\n        if (index < 0) {\n          loader.src = \`\${LOADER_URL}?title=\${encodeURI(LESSON_TITLE_B64)}\`;\n          index++;\n        } else {\n          loader.src = \`\${LOADER_URL}?data=\${encodeURI(dataChunks[index++])}\`;\n        }\n      } else {\n        window.location.replace(APPLICATION_URL);\n        loaded = true;\n        progress.style.display = 'none';\n      }\n    });\n    loader.src = \`\${LOADER_URL}\`;\n  <\/script>\n</html>\n`;
       }(stringToBase64(this.#title), stringToBase64(this.#content));
       this.saveDataToFile(html, "html");
     }
@@ -3222,11 +3222,18 @@
   class LessonImporter {
     constructor() {}
     convert(exportedData) {
+      if (this.isDataPlainText(exportedData)) return {
+        title: "",
+        content: exportedData
+      };
       try {
         return JSON.parse(base64ToString(exportedData));
       } catch (error) {
         return console.error(error), null;
       }
+    }
+    isDataPlainText(data) {
+      return !!data.match(/^ {0,3}(?:\(+([i?])\1*\)+)(.*)$/m);
     }
   }
   /**
@@ -4221,7 +4228,7 @@ Click continue to access the lesson library and see what is available.
       this.#cardState = cardState;
     }
     #showNextCard() {
-      if (console.log("Show the next card"), this.#endShowIfLastCard()) return;
+      if (console.log("Show the next card"), this.#endShowIfLastCard()) return void this.handleClickEvent(new Event("click"), Presenter.NEXT_ID);
       const readingSpeed = persistentData.getFromStorage("readingSpeed", 130);
       this.#cards.setWordsPerMinute(readingSpeed), this.#currentCardDetail = this.#cards.getNext(), this.#visualCard.innerHTML = this.#currentCardDetail.html;
       const cardRect = this.#visualCard.getBoundingClientRect(),
@@ -4234,7 +4241,7 @@ Click continue to access the lesson library and see what is available.
       }, 1e3 * this.#currentCardDetail.readTimeSecs));
     }
     #removeCard() {
-      this.#endShowIfLastCard() || this.#setCardState(CardState_LEAVING);
+      this.#setCardState(CardState_LEAVING);
     }
     #endShowIfLastCard() {
       return !this.#cards.hasMore && (this.#pauseButton.hide(), this.#playButton.hide(), this.#skipButton.hide(), this.showNextButton(!0), !0);
@@ -4326,7 +4333,8 @@ Click continue to access the lesson library and see what is available.
       }
     }
     #addHeadings() {
-      this.presentation.createAndAppendChild("h1", null, i18n`8a7b5ed72835af8c2804d8f5047da3d3::`), this.presentation.createAndAppendChild("h2", null, this.config.lessonInfo.titles.lesson), this.#addBookDetailsIfManaged();
+      const lessonTitle = this.config.lessonInfo.titles.lesson || this.config.lesson.metadata.getValue("TITLE", i18n`80ba26f176878a8c09fed91eec1847ac::`);
+      this.presentation.createAndAppendChild("h1", null, i18n`8a7b5ed72835af8c2804d8f5047da3d3::`), this.presentation.createAndAppendChild("h2", null, lessonTitle), this.#addBookDetailsIfManaged();
     }
     #addBookDetailsIfManaged() {
       if (this.config.lessonInfo.managed) {

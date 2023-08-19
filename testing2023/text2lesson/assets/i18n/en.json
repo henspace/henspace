@@ -73,6 +73,7 @@
   "d54132fd8e2fa9a6c89e8c27bc122fc2": "Are you sure you want to quit the lesson?",
   "3e67adbbda024584ca573026d35039d0": "Possible answers",
   "e5f965d7cf958839a31acefa71728846": "Possible answer to question",
+  "80ba26f176878a8c09fed91eec1847ac": "Unknown title",
   "8a7b5ed72835af8c2804d8f5047da3d3": "Certificate of achievement",
   "dba099f02fa6e674228bce51535a5cc4": "Score: ${percent}% (${marks.correct}/${totalQuestions})",
   "53e5c9dd7146d4e290db1b2bdc2c0daf": "The header",
