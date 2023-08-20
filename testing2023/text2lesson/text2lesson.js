@@ -28,9 +28,9 @@
   */
   const BuildInfo = {
       isBuilt: () => BuildInfo.getMode().indexOf("$") < 0,
-      getBuildDate: () => "2023-08-19 07:41:59Z",
+      getBuildDate: () => "2023-08-20 09:47:36Z",
       getMode: () => "development",
-      getVersion: () => "1.0.4 ",
+      getVersion: () => "1.0.5 ",
       getBundleName: () => "text2lesson.js"
     },
     blockReps = [{
@@ -558,8 +558,8 @@
     }(localStorage),
     rootUrl = window.location.href.replace(/index\.html(\?.*)?$/, ""),
     Urls = {
-      HELP: `${rootUrl}assets/documents/help.md`,
-      PRIVACY: `${rootUrl}assets/documents/privacy.md`
+      HELP: `${rootUrl}assets/docs/help.md`,
+      PRIVACY: `${rootUrl}assets/docs/privacy.md`
     };
   /**
   * @file Collection of urls.

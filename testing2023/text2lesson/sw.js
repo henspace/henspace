@@ -127,7 +127,7 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "revision": "186ad465389531bf37538df51a78c6a9"
   }, {
     "url": "text2lesson.js",
-    "revision": "ce089ac77c608871cfdd89f79c7a0ac8"
+    "revision": "af789681b7a0979b444c11c1b19e7b58"
   }], {});
 
 }));
