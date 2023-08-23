@@ -24,7 +24,7 @@
   box-sizing: border-box;
 }
 
-#browser-not-supported {
+#browser-css-not-supported {
   display: none;
 }
 
@@ -32,7 +32,7 @@
   #content {
     display: none !important;
   }
-  #browser-not-supported {
+  #browser-css-not-supported {
     display: block !important;
   }
 }
