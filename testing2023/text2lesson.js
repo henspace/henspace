@@ -87,7 +87,7 @@ return this.replace(new RegExp(pattern,"g"),replacement)}}}
    * @property {function():string} version - build version
    * @property {function():string} bundleName - final bundle name including the extension
    */const BuildInfo={isBuilt:()=>BuildInfo.getMode().indexOf("$")<0,
-getBuildDate:()=>"2023-08-24 16:22:08Z",getBundleName:()=>"text2lesson.js",
+getBuildDate:()=>"2023-08-24 20:21:35Z",getBundleName:()=>"text2lesson.js",
 getProductName:()=>"Text2Lesson",getMode:()=>"development",
 getVersion:()=>"1.0.11 "};
 /**
@@ -2611,7 +2611,7 @@ return this.#getUnmanagedLessonInfo(escapeHtml(this.#title),this.#origin)}
      * The lesson info is undefined except for the managed flag which is false and
      * the lesson title.
      * @param {string} lessonTitle
-     * @param {LessonOrigin} origin - this should be SESSION, EMBEDDED or FILE_SYSTEM if unmanaged
+     * @param {LessonOrigin} origin - this should be EMBEDDED or FILE_SYSTEM if unmanaged
      * @returns {LessonInfo}
      */#getUnmanagedLessonInfo(lessonTitle,origin){return{origin:origin,
 usingLocalLibrary:false,libraryKey:undefined,file:undefined,url:undefined,
@@ -2644,8 +2644,8 @@ lesson:lessonTitle}}}}
    * Possible origins for lessons.
    * @const
    * @enum {string}
-   */const LessonOrigin={REMOTE:"remote",LOCAL:"local",SESSION:"session",
-EMBEDDED:"embedded",FILE_SYSTEM:"file_system"};
+   */const LessonOrigin={REMOTE:"remote",LOCAL:"local",EMBEDDED:"embedded",
+FILE_SYSTEM:"file_system"};
 /**
    * @file Handle lesson provided via embedded data in the file.
    *
@@ -2669,22 +2669,22 @@ EMBEDDED:"embedded",FILE_SYSTEM:"file_system"};
    * along with this program.  If not, see <https://www.gnu.org/licenses/>.
    *
    */
-/** Class to handle lesson provided via the session storage. */
+/** Class to handle lesson provided via the embedded data. */
 class EmbeddedLesson extends UnmanagedLesson{
 /**
      * Create the session lesson
      */
 constructor(){
-super(EmbeddedLesson.#getEmbeddedItem("LESSON_TITLE_B64",window.LESSON_TITLE_B64),EmbeddedLesson.#getEmbeddedItem("LESSON_SOURCE_B64",window.LESSON_SOURCE_B64),LessonOrigin.EMBEDDED)
+super(EmbeddedLesson.#getEmbeddedItem("Embedded title",window.text2LessonEmbeddedData?.title),EmbeddedLesson.#getEmbeddedItem("Embedded source",window.text2LessonEmbeddedData?.source),LessonOrigin.EMBEDDED)
 }
 /** Get the embedded root url. It will have the trailing /.
      * This is where the lesson originated.
      * @returns {string}
-     */get rootUrl(){return window.LESSON_EMBEDDED_ROOT_URL}
+     */get rootUrl(){return window.text2LessonEmbeddedData?.rootUrl}
 /**
      * Get the embedded translations.
      * @returns {string}
-     */get translations(){return window.LESSON_TRANSLATIONS_B64}
+     */get translations(){return window.text2LessonEmbeddedData?.translations}
 /**
      * Gets the stored item. All items stored are expected to be in base64.
      * @param {string} name - just used for logging.
@@ -4356,49 +4356,6 @@ constructor(stageElement){this.#stage=new ManagedElement(stageElement)}
 presenter=await presenter.presentOnStage(this.#stage)
 ;this.#stage.removeChildren();if(presenter===null){return}}}}
 /**
-   * @file Handle lesson provided via session data.
-   *
-   * @module lessons/sessionDataLesson
-   *
-   * @license GPL-3.0-or-later
-   * Create quizzes and lessons from plain text files.
-   * Copyright 2023 Steve Butler (henspace.com)
-   *
-   * This program is free software: you can redistribute it and/or modify
-   * it under the terms of the GNU General Public License as published by
-   * the Free Software Foundation, either version 3 of the License, or
-   * (at your option) any later version.
-   *
-   * This program is distributed in the hope that it will be useful,
-   * but WITHOUT ANY WARRANTY; without even the implied warranty of
-   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   * GNU General Public License for more details.
-   *
-   * You should have received a copy of the GNU General Public License
-   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-   *
-   */
-/** Class to handle lesson provided via the session storage. */
-class SessionLesson extends UnmanagedLesson{
-/**
-     * @type {string}
-     * @const
-     */
-static DATA_KEY="data";static TITLE_KEY="title";
-/**
-     * Create the session lesson
-     */
-constructor(){
-super(SessionLesson.#getSessionItem(SessionLesson.TITLE_KEY),SessionLesson.#getSessionItem(SessionLesson.DATA_KEY),LessonOrigin.SESSION)
-}
-/**
-     * Gets the stored item. All items stored are expected to be in base64.
-     * @param {string} key
-     * @returns {string}
-     */static#getSessionItem(key){const storedValue=sessionStorage.getItem(key)
-;if(storedValue){return base64ToString(storedValue)}else{return storedValue}}}
-const sessionLesson=new SessionLesson;
-/**
    * @file General indexer for arrays
    *
    * @module utils/arrayIndexer
@@ -5097,8 +5054,11 @@ detail:{file:file,content:reader.result}}))}));reader.readAsText(file)}}
    * @param {string} data.b64LessonData - lesson definition text in base64
    * @param {string} data.b64Translations - translations from i18 in base64
    */function getAutorunHtml(data){
-const rootUrl=window.location.href.replace(/index\.html(\?.*)?$/,"")
-;return`<!DOCTYPE html>\n  <html lang="en">\n    <head>\n      <meta charset="UTF-8" />\n      <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n      <title>Text2Lesson</title>\n      <link\n        rel="icon"\n        type="image/png"\n        sizes="48x48"\n        href="${rootUrl}assets/images/favicon.appiconset/favicon_48.png"\n      />\n      <link\n        rel="apple-touch-icon"\n        type="image/png"\n        sizes="167x167"\n        href="${rootUrl}assets/images/favicon.appiconset/favicon_167.png"\n      />\n      <link\n        rel="apple-touch-icon"\n        type="image/png"\n        sizes="180x180"\n        href="${rootUrl}assets/images/favicon.appiconset/favicon_180.png"\n      />\n      <link\n        rel="icon"\n        type="image/png"\n        sizes="192x192"\n        href="${rootUrl}assets/images/favicon.appiconset/favicon_192.png"\n      />\n  \n      <link rel="stylesheet" href="${rootUrl}assets/styles/style.css" />\n      <link\n        href="${rootUrl}assets/third-party/font-awesome/css/fontawesome.min.css"\n        rel="stylesheet"\n      />\n      <link\n        href="${rootUrl}assets/third-party/font-awesome/css/brands.min.css"\n        rel="stylesheet"\n      />\n      <link\n        href="${rootUrl}assets/third-party/font-awesome/css/solid.min.css"\n        rel="stylesheet"\n      />\n    </head>\n  <script>\n      var LESSON_TITLE_B64 = "${data.b64Title}";\n      var LESSON_SOURCE_B64 = "${data.b64LessonData}";\n      var LESSON_TRANSLATIONS_B64 = "${data.b64Translations}";\n      var LESSON_EMBEDDED_ROOT_URL = "${data.rootUrl}";\n  <\/script>\n    <body>\n      <div id="modal-mask"></div>\n      <div id="title-bar"></div>\n      <div id="content" class="container">\n        <div id="stage">\n          <p>The application is loading. Please wait a few moments.</p>\n        </div>\n      </div>\n      <div id="footer" class="container"></div>\n      <script type="module" src="${rootUrl}text2lesson.js"><\/script>\n      <noscript class="always-on-top">\n        <p>\n          Your browser does not support scripts and so this application cannot\n          run. If you've disabled scripts, you will need to enable them to\n          proceed. Sorry.\n        </p>\n      </noscript>\n      <div id="browser-css-not-supported">\n        <p>\n          Sorry, but your browser does not support the features necessary to run\n          this application. Try upgrading your browser to the latest version.\n        </p>\n      </div>\n    </body>\n  </html>\n  `
+let rootUrl=window.location.href.replace(/index\.html(\?.*)?$/,"")
+;if(!rootUrl.endsWith("/")){
+// should be an unnecessary check but defensive.
+rootUrl+="/"}
+return`<!DOCTYPE html>\n  <html lang="en">\n    <head>\n      <meta charset="UTF-8" />\n      <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n      <title>Text2Lesson</title>\n      <link\n        rel="icon"\n        type="image/png"\n        sizes="48x48"\n        href="${rootUrl}assets/images/favicon.appiconset/favicon_48.png"\n      />\n      <link\n        rel="apple-touch-icon"\n        type="image/png"\n        sizes="167x167"\n        href="${rootUrl}assets/images/favicon.appiconset/favicon_167.png"\n      />\n      <link\n        rel="apple-touch-icon"\n        type="image/png"\n        sizes="180x180"\n        href="${rootUrl}assets/images/favicon.appiconset/favicon_180.png"\n      />\n      <link\n        rel="icon"\n        type="image/png"\n        sizes="192x192"\n        href="${rootUrl}assets/images/favicon.appiconset/favicon_192.png"\n      />\n  \n      <link rel="stylesheet" href="${rootUrl}assets/styles/style.css" />\n      <link\n        href="${rootUrl}assets/third-party/font-awesome/css/fontawesome.min.css"\n        rel="stylesheet"\n      />\n      <link\n        href="${rootUrl}assets/third-party/font-awesome/css/brands.min.css"\n        rel="stylesheet"\n      />\n      <link\n        href="${rootUrl}assets/third-party/font-awesome/css/solid.min.css"\n        rel="stylesheet"\n      />\n    </head>\n  <script>\n      var text2LessonEmbeddedData = {\n        title: "${data.b64Title}",\n        source: "${data.b64LessonData}",\n        languages: "${data.b64Translations}",\n        rootUrl: "${rootUrl}",\n      }\n      \n  <\/script>\n    <body>\n      <div id="modal-mask"></div>\n      <div id="title-bar"></div>\n      <div id="content" class="container">\n        <div id="stage">\n          <p>The application is loading. Please wait a few moments.</p>\n        </div>\n      </div>\n      <div id="footer" class="container"></div>\n      <script type="module" src="${rootUrl}text2lesson.js"><\/script>\n      <noscript class="always-on-top">\n        <p>\n          Your browser does not support scripts and so this application cannot\n          run. If you've disabled scripts, you will need to enable them to\n          proceed. Sorry.\n        </p>\n      </noscript>\n      <div id="browser-css-not-supported">\n        <p>\n          Sorry, but your browser does not support the features necessary to run\n          this application. Try upgrading your browser to the latest version.\n        </p>\n      </div>\n    </body>\n  </html>\n  `
 }
 /**
    * @file Importers and Exporters for lesson data.
@@ -6626,7 +6586,7 @@ constructor(config){super(config);this.#buildContent()}
 /**
      * Adjust the buttons for the lesson origin.
      */#adjustButtonsForOrigin(){switch(this.config.lessonInfo.origin){
-case LessonOrigin.SESSION:case LessonOrigin.EMBEDDED:this.hideHomeButton()
+case LessonOrigin.EMBEDDED:this.hideHomeButton()
 ;this.applyIconToNextButton(icons.exit);this.showNextButton();break
 ;case LessonOrigin.REMOTE:this.applyIconToNextButton(icons.selectLesson)
 ;this.showNextButton();break}}
@@ -6831,8 +6791,8 @@ if(lessonManager.lessonTitles.length<=1){lessonManager.lessonIndex=0
      * Get the initial presenter.
      * @returns {Presenter}
      */static getInitial(){const config={factory:new PresenterFactory}
-;if(sessionLesson.hasLesson){config.lesson=sessionLesson.lesson
-;config.lessonInfo=sessionLesson.lessonInfo;if(config.lesson.hasMoreProblems){
+;if(embeddedLesson.hasLesson){config.lesson=embeddedLesson.lesson
+;config.lessonInfo=embeddedLesson.lessonInfo;if(config.lesson.hasMoreProblems){
 return config.factory.getSuitableProblemPresenter(config)}else{
 return new MarksPresenter(config)}}return new HomePresenter(config)}}
 /**

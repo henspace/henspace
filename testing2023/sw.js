@@ -123,11 +123,8 @@ define(['./workbox-fd9479e2'], (function (workbox) { 'use strict';
     "url": "index.html",
     "revision": "76a91e8ca803abedb4bf736fb158bf2d"
   }, {
-    "url": "session-data-builder.html",
-    "revision": "186ad465389531bf37538df51a78c6a9"
-  }, {
     "url": "text2lesson.js",
-    "revision": "df99254afa4c3e146895bf1458febf28"
+    "revision": "0b5e35e644b062cda083afcde093191d"
   }], {});
 
 }));
