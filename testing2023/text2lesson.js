@@ -348,7 +348,7 @@ if(pattern.flags.indexOf("g")<0)throw new TypeError("String.prototype.replaceAll
 ;return this.replace(pattern,replacement)}
 return this.replace(new RegExp(pattern,"g"),replacement)});var BuildInfo={
 isBuilt:function(){return BuildInfo.getMode().indexOf("$")<0},
-getBuildDate:function(){return"2023-08-24 14:08:13Z"},getBundleName:function(){
+getBuildDate:function(){return"2023-08-24 14:40:13Z"},getBundleName:function(){
 return"text2lesson.js"},getProductName:function(){return"Text2Lesson"},
 getMode:function(){return"development"},getVersion:function(){return"1.0.11 "}
 },blockReps=[{re:/(?:(.+)\n=+\n)/g,rep:"\n\n<h1>$1</h1>\n\n"},{
@@ -1026,12 +1026,13 @@ value:function(librariesFileLocation){var _this5=this
 ;_classPrivateFieldSet(this,_libraries,new Map)
 ;var localLibrary=new LocalLibrary
 ;return _classPrivateFieldGet(this,_libraries).set(localLibrary.key,localLibrary.info),
-fetchJson(librariesFileLocation).then((function(entries){
+librariesFileLocation?fetchJson(librariesFileLocation).then((function(entries){
 for(var key in entries){var entry=entries[key]
 ;entry.title=escapeHtml(entry.title),
 _classPrivateFieldGet(_this5,_libraries).set(key,entries[key]),
 _classPrivateFieldGet(_this5,_libraries).get(key).books=[]}
-return _classPrivateFieldGet(_this5,_libraries).size}))}},{
+return _classPrivateFieldGet(_this5,_libraries).size
+})):Promise.resolve(_classPrivateFieldGet(this,_libraries).size)}},{
 key:"loadAllLibraryContent",value:function(){var _this6=this
 ;return _classPrivateMethodGet(this,_loadLibraryContent,_loadLibraryContent2).call(this,LocalLibrary.LOCAL_LIBRARY_KEY).then((function(){
 return _classPrivateMethodGet(_this6,_loadLibraryContent,_loadLibraryContent2).call(_this6,_classPrivateFieldGet(_this6,_remoteLibraryKey))
@@ -2924,13 +2925,16 @@ LessonPresenter}return presenterClass}var throttleTimer=null
 function showFatalError(error){
 var html="<h1>Whoops!</h1>\n  <p>An error has occured from which I can't recover on my own.</p>\n  <ul>\n  <li>Name: ".concat(error.name,"</li>\n  <li>Cause: ").concat(error.cause,"</li>\n  <li>Message: ").concat(error.message,"</li>\n  </ul>\n  <p>Try reloading the application.</p>\n  ")
 ;console.error(error),document.getElementById("content").innerHTML=html}
-function loadApplication(){
-console.info("Launching application."),persistentData.setStorageKeyPrefix("LR_".concat(BuildInfo.getBundleName().replace(".","_")))
-;var embeddedTranslations="undefined"!=typeof LESSON_TRANSLATIONS_B64?LESSON_TRANSLATIONS_B64:null
-;return console.log("Embedded translations = ".concat(embeddedTranslations)),
+function loadApplication(){var embeddedTranslations
+;console.info("Launching application."),
+persistentData.setStorageKeyPrefix("LR_".concat(BuildInfo.getBundleName().replace(".","_")))
+;var librariesLocation="assets/lessons/libraries.json"
+;return window.LESSON_TRANSLATIONS_B64&&(embeddedTranslations=window.LESSON_TRANSLATIONS_B64,
+librariesLocation=""),
+console.log("Embedded translations = ".concat(embeddedTranslations)),
 getLanguages(embeddedTranslations).then((function(){
-return lessonManager.loadAllLibraries("assets/lessons/libraries.json")
-})).then((function(){return loadSettingDefinitions({palette:{type:"separator",
+return lessonManager.loadAllLibraries(librariesLocation)})).then((function(){
+return loadSettingDefinitions({palette:{type:"separator",
 label:i18n(_templateObject42||(_templateObject42=_taggedTemplateLiteral(["54016c9d89a98aa8bf2e8a8e7ba6f352::"])))
 },hue:{type:"range",
 label:i18n(_templateObject43||(_templateObject43=_taggedTemplateLiteral(["d86cbd21656e6a16eeebdf3041f7d9b0::"]))),
