@@ -6,8 +6,8 @@ projects I'm working on. Feel free to take a look around.
 ## Portfolio
 
 If you're interested in what sort of things I draw, there's a random selection in my portfolio.
-[![Picture of lots of rabbits](images/portfolio.jpg)](https://www.stevejbutler.com/)
-[Portfolio](https://www.stevejbutler.com/)
+[![Picture of lots of rabbits](images/portfolio.jpg)](https://sites.google.com/view/stevejbutler/home)
+[Portfolio](https://sites.google.com/view/stevejbutler/home)
 
 ## Webtoons comics
 
