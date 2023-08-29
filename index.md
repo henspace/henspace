@@ -11,6 +11,7 @@ projects I'm working on. Feel free to take a look around.
 ## Webtoons comics
 
 I've been working on a number of comic which are all freely available at Webtoons.
+
 [![Cover for comic called Empty Minds](images/EmptyMindsCoverx209.jpg)](https://www.webtoons.com/en/creator/u93vy)
 [Webtoons comics](https://www.webtoons.com/en/creator/u93vy)
 

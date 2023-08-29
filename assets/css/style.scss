@@ -3,11 +3,11 @@
 
 @import "{{ site.theme }}";
 
-.centred {
+section a + a {
   text-align: center;
 }
 
-.centred img {
+section a img {
   display: block;
   margin: auto;
 }
