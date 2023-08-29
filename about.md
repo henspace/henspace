@@ -6,11 +6,13 @@ I'm an illustrator and software developer working in the south of England. Most 
 
 The illustrations tend to take a slightly sideways look at the subject to provide a less obvious view point.
 
+I also work on some open-source software projects. If that's the sort of thing you're into, pop over to [Henspace @ GitHub](https://github.com/henspace).
+
 ## Want to get in touch?
 
 If you want to ask me anything:
 
-- pop along to my [portfolio site](https://www.stevejbutler.com/about), or
-- DM me on [Mastodon](https://sunny.garden/@henspace)
+- pop along to my [portfolio site](https://sites.google.com/view/stevejbutler/home), or
+- follow me on [Mastodon](https://sunny.garden/@henspace)
 
 [Home](index.md) | [Privacy](privacy.md)
