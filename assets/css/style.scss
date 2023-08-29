@@ -3,7 +3,13 @@
 
 @import "{{ site.theme }}";
 
+body {
+  background: url(/images/sayagata-400px.png) repeat;
+}
+
 section a + a {
+  display: block;
+  margin: auto;
   text-align: center;
 }
 
