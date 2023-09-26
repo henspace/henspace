@@ -25,7 +25,7 @@ No cookies are used by this site.
 No personal data is automatically collected by me via the site; however, the site is hosted on GitHub pages which does log and store your IP address for security purposes.
 Check the [GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement) for details.
 
-If you contact me, either by email, contact forms or social media, to enquire about a product, site or for any other purposes, your contact details and communications may be retained for the legitimate interests of processing your enquiry, dispute resolution or legal defence. It will not be sold, passed on to any third party or used for any purpose other than responding to the enquiry. It will not be used for marketing purposes or any other purposes that would not be reasonably expected based upon the nature of the enquiry and subsequent communications.
+If you contact me, either by email, contact forms or social media, to enquire about a product, site or for any other purposes, your contact details and communications may be retained for the legitimate interests of processing your enquiry, dispute resolution or legal defence. They will not be sold, used for any purpose other than responding to the enquiry, or passed on to any third party unless required by law or for legal defence. They will not be used for marketing purposes or any other purposes that would not be reasonably expected based upon the nature of the enquiry and subsequent communications.
 
 ## 7.0 Obsolete products
 
