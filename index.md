@@ -3,20 +3,27 @@
 Hi! Welcome to Henspace.com. This is just a portal pointing to a variety of
 projects I'm working on. Feel free to take a look around.
 
-## Portfolio
+# RapidQandA
+
+RapidQandA is an application that has been designed to take plain text files and convert them into quizzes and lessons. It's free, with no account needed and no ads.
+
+[![Cover for comic called Empty Minds](images/rapidqanda-portrait.jpg)](http://rapidqanda.com)
+[RapidQandA](http://rapidqanda.com)
+
+# Portfolio
 
 If you're interested in what sort of things I draw, there's a random selection in my portfolio.
 [![Picture of lots of rabbits](images/portfolio.jpg)](https://sites.google.com/view/stevejbutler/home)
 [Portfolio](https://sites.google.com/view/stevejbutler/home)
 
-## Webtoons comics
+# Webtoons comics
 
 I've also been working on a number of comics which are all freely available at Webtoons.
 
 [![Cover for comic called Empty Minds](images/EmptyMindsCoverx209.jpg)](https://www.webtoons.com/en/creator/u93vy)
 [Webtoons comics](https://www.webtoons.com/en/creator/u93vy)
 
-## Too many owls: a children's story
+# Too many owls: a children's story
 
 This is a story for children up to about 3 or 4. It's free and slightly interactive.
 
