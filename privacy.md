@@ -29,6 +29,6 @@ If you contact me, either by email, contact forms or social media, to enquire ab
 
 ## 7.0 Obsolete products
 
-For your convenience, details for some products that are no longer available or supported is available; refer to the [obsolete products' privacy](privacy_obsolete.md) for more details.
+For your convenience, details for some products that are no longer available or supported are available; refer to the [obsolete products' privacy](privacy_obsolete.md) for more details.
 
 [Home](index.md) | [About](about.md) | [Privacy](privacy.md)
