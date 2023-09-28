@@ -4,8 +4,6 @@
 
 This policy refers to this website. Note that clicking links may direct you to other sites with different policies. Refer to the documentation on those sites for details.
 
-Your privacy is important to me and any information that you provide to me will only be used for the provision of the service for which the information was originally provided and it will not be sold or passed on to any third party unless required to by law.
-
 This Privacy Policy may be updated from time to time for any reason. You are advised to consult this Privacy Policy regularly for any changes.
 
 ## 2.0 External links
@@ -22,7 +20,7 @@ No cookies are used by this site.
 
 ## 5.0 Personal data
 
-No personal data is automatically collected by me via the site; however, the site is hosted on GitHub pages which does log and store your IP address for security purposes.
+No personal data is automatically collected by me via the site; however, the site is hosted on GitHub Pages which does log and store your IP address for security purposes.
 Check the [GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement) for details.
 
 If you contact me, either by email, contact forms or social media, to enquire about a product, site or for any other purposes, your contact details and communications may be retained for the legitimate interests of processing your enquiry, dispute resolution or legal defence. They will not be sold, used for any purpose other than responding to the enquiry, or passed on to any third party unless required by law or for legal defence. They will not be used for marketing purposes or any other purposes that would not be reasonably expected based upon the nature of the enquiry and subsequent communications.
