@@ -10,11 +10,15 @@ RapidQandA is an application that has been designed to take plain text files and
 [![Cover for comic called Empty Minds](images/rapidqanda-portrait.jpg)](http://rapidqanda.com)
 [RapidQandA](http://rapidqanda.com)
 
-# Portfolio
+# Drawings
 
-If you're interested in what sort of things I draw, there's a random selection in my portfolio.
-[![Picture of lots of rabbits](images/portfolio.jpg)](https://sites.google.com/view/stevejbutler/home)
-[Portfolio](https://sites.google.com/view/stevejbutler/home)
+If you're interested in what sort of things I draw, take a look at my other social media sites or my [Redbubble](henspace.redbubble.com) shop.
+
+![Picture of man holding pen](images/drawings.jpg)
+
+- [![Facebook log0](images/Facebook_Logo_Primary_x32.png) This is henspace](https://facebook.com/thisishenspace)
+- [![Instagram logo](images/Instagram_Glyph_Gradient_x32.png) Henspace is drawing](https://www.instagram.com/henspace_is_drawing/)
+- [![Redbubble logo](images/redbubble_x32.png) Redbubble shop](henspace.redbubble.com)
 
 # Webtoons comics
 

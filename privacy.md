@@ -8,7 +8,7 @@ This Privacy Policy may be updated from time to time for any reason. You are adv
 
 ## 2.0 External links
 
-This site may include links or buttons to redirect you to third party sites. These are provided for your convenience. No responsibility is accepted for the content of the external sites or the products and services offered. You should familiarise yourself with their individual privacy policies when visiting these sites.
+This site may include links or buttons to redirect you to third party sites. These are provided for your convenience. No responsibility is accepted for the content of the external sites or the products and services offered. You should familiarise yourself with their individual privacy policies when visiting those sites.
 
 ## 3.0 Advertising
 
