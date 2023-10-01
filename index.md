@@ -14,11 +14,10 @@ RapidQandA is an application that has been designed to take plain text files and
 
 If you're interested in what sort of things I draw, take a look at my other social media sites or my [Redbubble](henspace.redbubble.com) shop.
 
-![Picture of man holding pen](images/drawings.jpg)
+[![Picture of man holding pen](images/drawings.jpg)](https://henspace.redbubble.com/)
+![Redbubble logo](images/redbubble_x32.png) [Redbubble shop](henspace.redbubble.com)
 
-- [![Facebook log0](images/Facebook_Logo_Primary_x32.png) This is henspace](https://facebook.com/thisishenspace)
-- [![Instagram logo](images/Instagram_Glyph_Gradient_x32.png) Henspace is drawing](https://www.instagram.com/henspace_is_drawing/)
-- [![Redbubble logo](images/redbubble_x32.png) Redbubble shop](henspace.redbubble.com)
+![Instagram logo](images/Instagram_Glyph_Gradient_x32.png) [Instagram: Henspace is drawing](https://www.instagram.com/henspace_is_drawing/)
 
 # Webtoons comics
 
