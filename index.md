@@ -16,8 +16,9 @@ If you're interested in what sort of things I draw, take a look at my other soci
 
 [![Picture of man holding pen](images/drawings.jpg)](https://henspace.redbubble.com/)
 
-- ![Redbubble logo](images/redbubble_x32.png) [Redbubble shop](henspace.redbubble.com)
-- ![Instagram logo](images/Instagram_Glyph_Gradient_x32.png) [Instagram: Henspace is drawing](https://www.instagram.com/henspace_is_drawing/)
+![Redbubble logo](images/redbubble_x32.png) [Redbubble shop](henspace.redbubble.com)
+
+![Instagram logo](images/Instagram_Glyph_Gradient_x32.png) [Instagram: Henspace is drawing](https://www.instagram.com/henspace_is_drawing/)
 
 # Webtoons comics
 
