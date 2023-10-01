@@ -10,9 +10,6 @@ I also work on some open-source software projects. If that's the sort of thing y
 
 ## Want to get in touch?
 
-If you want to ask me anything:
-
-- pop along to my [portfolio site](https://sites.google.com/view/stevejbutler/home), or
-- follow me on [Mastodon](https://sunny.garden/@henspace)
+If you want to ask me anything, follow me on [Mastodon](https://sunny.garden/@henspace)
 
 [Home](index.md) | [Privacy](privacy.md)
