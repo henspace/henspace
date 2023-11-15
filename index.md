@@ -20,6 +20,8 @@ If you're interested in what sort of things I draw, take a look at my other soci
 
 ![Instagram logo](images/Instagram_Glyph_Gradient_x32.png) [Instagram: Henspace is drawing](https://www.instagram.com/henspace_is_drawing/)
 
+![DeviantArt logo](images/DeviantArt_Logo.png) [DeviantArt: Henspace is drawing](https://www.deviantart.com/henspaceisdrawing)
+
 # Webtoons comics
 
 I've also been working on a number of comics which are all freely available at Webtoons.
