@@ -10,6 +10,9 @@ I also work on some open-source software projects. If that's the sort of thing y
 
 ## Want to get in touch?
 
-If you want to ask me anything, find me on [Instagram](https://www.instagram.com/henspace_is_drawing/) or [DeviantArt](https://www.deviantart.com/henspaceisdrawing).
+If you want to ask me anything, find me on the following sites:
+
+- [Instagram](https://www.instagram.com/henspace_is_drawing/)
+- [DeviantArt](https://www.deviantart.com/henspaceisdrawing)
 
 [Home](index.md) | [Privacy](privacy.md)
