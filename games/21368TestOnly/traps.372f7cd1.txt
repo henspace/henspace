@@ -1,0 +1,1 @@
+0,COMMON,TRAP,spikes * SEVERITY: SETBACK, REWARD: platinum_coins
