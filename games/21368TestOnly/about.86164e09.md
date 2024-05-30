@@ -27,7 +27,15 @@ The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International
 License available at
 [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/legalcode).
 
-## Music and sounds
+## Fonts
+
+The following fonts are licensed under the [Open font license](https://openfontlicense.org/).
+- [Fondamento](https://fonts.google.com/specimen/Fondamento): font by Astigmatic.
+- [BabelStone Runic Elder Futhark](https://www.babelstone.co.uk/Fonts/ElderFuthark.html): font by [Andrew West](https://www.babelstone.co.uk/Fonts/BabelStoneOFL.txt).
+
+## Music and sounds 
+
+The following sounds are licensed under the [Pixabay license](https://pixabay.com/service/license-summary/).
 
 - Background music: trimmed version of [Do alto do Trono da Desolação](https://pixabay.com/music/mystery-do-alto-do-trono-da-desolacao-173741/) by [Composiia](https://pixabay.com/users/composiia-38203768/) via Pixabay
 - Punch sounds: trimmed version of [Punch](https://pixabay.com/sound-effects/punch-41105/) by Pixabay via Pixabay
