@@ -1,2 +1,0 @@
-# Unused at present. Passed to the createAutoSceneList function in 
-# autoSceneList.js.
