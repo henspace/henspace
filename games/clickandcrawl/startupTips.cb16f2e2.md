@@ -9,6 +9,7 @@ On a scrap of vellum passed to you by the village elder are some notes that prev
 - Cantrips are quick magic. If you learn any, you can use them straight away.
 - Spells that you learn are more complex and you need to take a long rest to prepare them ready for use. But how do you rest?
 - Resting takes place between dungeon floors and can restore health, remove the ongoing effects of poisons, and give you time to prepare spells. You need one meal (food and drink) for a short rest, and three meals for a long rest.
+- Iron and steel are contaminated with iron-blight and are prone to sudden failure. Keep your eye out for the sign of a broken weapon. Broken weapons are lost immediately.![](http://ASSET_URL_GUIDE_WEAPON_BREAK)
 - The little target icon at the bottom right of the map, centres the map on your hero. Drag the map to disable it; click it again to enable it.![](http://ASSET_URL_GUIDE_TARGET)
 
 Good luck! You're going to need it. Many brave explorers have died within these unforgiving walls, and
