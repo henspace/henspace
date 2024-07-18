@@ -2,7 +2,7 @@
 
 ## 1.0 General
 
-This policy refers to this website. Note that clicking links may direct you to other sites with different policies. Refer to the documentation on those sites for details.
+This policy refers solely to this website. Note that clicking links may direct you to other sites with different policies. Refer to the documentation on those sites for details of their privacy policies.
 
 This Privacy Policy may be updated from time to time for any reason. You are advised to consult this Privacy Policy regularly for any changes.
 

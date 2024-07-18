@@ -3,12 +3,21 @@
 Hi! Welcome to Henspace.com. This is just a portal pointing to a variety of
 projects I'm working on. Feel free to take a look around.
 
-# RapidQandA
+# Games and apps
+
+## Click and crawl
+
+Click and Crawl is an old-school dungeon crawler for quick, casual dungeon explorations. You have been asked by your fellow townsfolk to enter the dungeons and send back as much gold as you can via the ancient dwarven portals that are reported to exist within the dungeons' unforgiving walls. The elders will explain more.
+
+[![Screenshot showing a dungeon from the Click and Crawl dungeon crawler](images/clickandcrawl_209.jpg)](https://henspace.itch.io/click-and-crawl)
+[Click and Crawl](https://henspace.itch.io/click-and-crawl)
+
+## RapidQandA
 
 RapidQandA is an application that has been designed to take plain text files and convert them into quizzes and lessons. It's free, with no account needed and no ads.
 
-[![Cover for comic called Empty Minds](images/rapidqanda-portrait.jpg)](http://rapidqanda.com)
-[RapidQandA](http://rapidqanda.com)
+[![Cover for comic called Empty Minds](images/rapidqanda-portrait.jpg)](https://henspace.github.io/text2lesson-docs/)
+[RapidQandA](https://henspace.github.io/text2lesson-docs/)
 
 # Drawings
 
@@ -17,10 +26,6 @@ If you're interested in what sort of things I draw, take a look at my other soci
 [![Picture of man holding pen](images/drawings.jpg)](https://henspace.redbubble.com/)
 
 ![Redbubble logo](images/redbubble_x32.png) [Redbubble shop](https://henspace.redbubble.com)
-
-![Instagram logo](images/Instagram_Glyph_Gradient_x32.png) [Instagram: Henspace is drawing](https://www.instagram.com/henspace_is_drawing/)
-
-![DeviantArt logo](images/DeviantArt_Logo.png) [DeviantArt: Henspace is drawing](https://www.deviantart.com/henspaceisdrawing)
 
 # Webtoons comics
 

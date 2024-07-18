@@ -10,9 +10,12 @@ I also work on some open-source software projects. If that's the sort of thing y
 
 ## Want to get in touch?
 
-If you want to ask me anything, find me on the following sites:
+If you want to ask me anything, you can find me scattered all over the web at the following sites:
 
-- [Instagram](https://www.instagram.com/henspace_is_drawing/)
-- [DeviantArt](https://www.deviantart.com/henspaceisdrawing)
+- [GitHub](https://github.com/henspace)
+- [Itch.io](https://henspace.itch.io/)
+- [Mastodon](https://sunny.garden/@henspace24)
+- [Redbubble](https://henspace.redbubble.com/)
+- [Webtoons](https://www.webtoons.com/en/creator/u93vy)
 
 [Home](index.md) | [Privacy](privacy.md)
