@@ -1,6 +1,6 @@
 # Welcome
 
-Hi! Welcome to Henspace.com. This is just a portal pointing to a variety of
+Hi! Welcome to Henspace. This is just a portal pointing to a variety of
 projects I'm working on. Feel free to take a look around.
 
 # Games and apps
