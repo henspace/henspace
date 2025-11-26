@@ -1,4 +1,0 @@
-0,COMMON,COINS,copper_coins * VALUE:1D20 CP
-0,UNCOMMON,COINS,silver_coins * VALUE:1D20 SP
-0,RARE,COINS,gold_coins * VALUE:1D20 GP
-0,VERY_RARE,COINS,platinum_coins * VALUE:1D20 PP

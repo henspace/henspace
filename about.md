@@ -15,7 +15,6 @@ If you want to ask me anything, you can find me scattered all over the web at th
 - [GitHub](https://github.com/henspace)
 - [Itch.io](https://henspace.itch.io/)
 - [Mastodon](https://sunny.garden/@henspace24)
-- [Redbubble](https://henspace.redbubble.com/)
 - [Webtoons](https://www.webtoons.com/en/creator/u93vy)
 
 [Home](index.md) | [Privacy](privacy.md)
